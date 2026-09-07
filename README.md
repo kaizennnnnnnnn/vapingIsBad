@@ -74,6 +74,7 @@ assets/js/data.js          all content: facts, chemicals, myths, prices, quiz, s
 assets/js/render.js        turns the data layer into markup
 assets/js/calculator.js    cost + nicotine + compounding engine
 assets/js/quiz.js          quiz state machine
+assets/js/vapour.js        the scroll-driven aerosol canvas
 assets/js/reveal.js        scroll progress, reveal-on-enter, disclosures
 assets/js/main.js          nav, share, anchors
 tools/shoot.mjs            screenshot + overflow harness

@@ -12,7 +12,9 @@
   const root = document.querySelector("[data-quiz]");
   if (!root) return;
 
-  const KEYS = ["A", "B", "C", "D", "E"];
+  // These are key caps, not list markers: the keyboard handler below listens
+  // for 1-4, so the label on the button has to be the key you actually press.
+  const KEYS = ["1", "2", "3", "4", "5"];
 
   const ui = {
     counter: root.querySelector("[data-q-counter]"),

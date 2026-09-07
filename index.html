@@ -14,7 +14,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0c'/><circle cx='16' cy='16' r='7' fill='%23ff3d1f'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
@@ -45,7 +45,6 @@
 
 <!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
 <section class="hero" id="open">
-  <div class="hero__haze" aria-hidden="true"></div>
   <div class="shell hero__inner">
     <p class="kicker">A read for one person in particular</p>
     <h1 class="display display--h1 hero__title">
@@ -54,9 +53,7 @@
       <span><em>So here are the receipts.</em></span>
     </h1>
     <p class="lead" style="margin-bottom:var(--sp-6)">
-      Every number here was checked against the study it came from. The ones that
-      didn&rsquo;t survive got cut &mdash; including some of the scary stuff
-      you&rsquo;ve probably been told. Read it, argue with it, then take the quiz.
+      Every number checked against its source. The ones that failed got cut.
     </p>
     <div class="hero__cta">
       <a class="btn btn--solid" href="#money">See what it&rsquo;s costing you <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
@@ -71,6 +68,26 @@
   <span class="hero__scroll">Scroll</span>
 </section>
 
+<!-- ═══ TICKER ═════════════════════════════════════════════════════════ -->
+<div class="marquee">
+  <div class="marquee__track">
+    <span class="marquee__item"><b>98%</b> less NNAL than smoking</span>
+    <span class="marquee__item"><b>&pound;8.39</b> a week, average UK spend</span>
+    <span class="marquee__item"><b>69%</b> cheaper per mL since 2020</span>
+    <span class="marquee__item">Popcorn lung: <b>zero</b> confirmed cases</span>
+    <span class="marquee__item"><b>20 mg/mL</b> UK legal ceiling</span>
+    <span class="marquee__item"><b>51%</b> quit with medication, <b>14%</b> without</span>
+  </div>
+  <div class="marquee__track" aria-hidden="true">
+    <span class="marquee__item"><b>98%</b> less NNAL than smoking</span>
+    <span class="marquee__item"><b>&pound;8.39</b> a week, average UK spend</span>
+    <span class="marquee__item"><b>69%</b> cheaper per mL since 2020</span>
+    <span class="marquee__item">Popcorn lung: <b>zero</b> confirmed cases</span>
+    <span class="marquee__item"><b>20 mg/mL</b> UK legal ceiling</span>
+    <span class="marquee__item"><b>51%</b> quit with medication, <b>14%</b> without</span>
+  </div>
+</div>
+
 <!-- ═══ 01 · THE HONEST BIT ════════════════════════════════════════════ -->
 <section class="band band--bone" id="honest">
   <div class="shell">
@@ -81,9 +98,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          If a page opens by telling you vaping is as bad as smoking, you can close
-          it, because that isn&rsquo;t true and you already know it. So here is the
-          strongest evidence on your side, stated as generously as it deserves.
+          If a page opens by telling you vaping is as bad as smoking, close it.
+          That isn&rsquo;t true, and you already know it.
         </p>
       </div>
     </div>
@@ -91,39 +107,43 @@
     <div class="grid">
       <div class="col-body prose" data-reveal>
         <p>
-          Measured in actual people, not models: someone who only vapes carries
-          <strong>98% less NNAL</strong> &mdash; a marker for a tobacco-specific
-          carcinogen &mdash; than someone who smokes. The UK government&rsquo;s
-          own review found the same pattern across a whole panel of markers, and
-          those are the bars on the right. For a smoker, switching is a large,
-          real, well-evidenced win. Cochrane rates it <strong>high certainty</strong>
-          that nicotine vapes beat patches and gum for quitting cigarettes.
+          Measured in actual people: someone who only vapes carries
+          <strong>98% less NNAL</strong> &mdash; a tobacco-carcinogen marker &mdash;
+          than someone who smokes. Cochrane rates it <strong>high certainty</strong>
+          that vapes beat patches for quitting cigarettes.
         </p>
         <p>
           Here is the turn. Every one of those numbers compares vaping to
-          <em>smoking</em>. None of them compares vaping to nothing. And on that
-          second question, the same UK review &mdash; from the health authority
-          most supportive of vaping anywhere in the world &mdash; is not ambiguous:
+          <em>smoking</em>. None compares vaping to <em>nothing</em>. On that
+          second question, the same UK review is not ambiguous:
         </p>
         <blockquote class="pull" data-reveal>
-          &ldquo;&hellip;findings of higher absolute exposure from vaping compared with
-          not using any nicotine products reinforce the need to <strong>discourage
-          people who have never smoked from taking up vaping</strong>.&rdquo;
+          &ldquo;&hellip;<strong>discourage people who have never smoked from taking
+          up vaping</strong>.&rdquo;
           <cite>Office for Health Improvement and Disparities, <a href="https://www.gov.uk/government/publications/nicotine-vaping-in-england-2022-evidence-update/nicotine-vaping-in-england-2022-evidence-update-summary" target="_blank" rel="noopener noreferrer">Nicotine vaping in England evidence review</a></cite>
         </blockquote>
         <p>
-          That is the whole argument, and the rest of this page is detail. Two
-          different questions, two different answers. The evidence that vaping
+          Two different questions, two different answers. Evidence that vaping
           helps smokers quit is not evidence that vaping is good for you.
         </p>
       </div>
       <div class="col-side" data-reveal>
+        <figure class="figure" style="margin-bottom:var(--sp-6)">
+          <div class="figure__frame figure__frame--duo" style="--ar:700/466;--duo:var(--alarm)">
+            <img src="assets/img/lab-cdc.jpg" width="700" height="466" loading="lazy" decoding="async"
+                 alt="Five e-cigarette devices clamped into an aerosol-sampling machine inside a CDC laboratory.">
+          </div>
+          <figcaption>
+            This is where numbers like the ones below come from: devices clamped
+            into a sampling rig and run under controlled conditions.
+            <span class="figure__credit">CDC / Von Roebuck, photo by Lauren Bishop &mdash; public domain</span>
+          </figcaption>
+        </figure>
         <p class="kicker">Vaper vs smoker, by toxicant marker</p>
         <ul class="bars" data-r-bars-nicotine></ul>
         <p class="fact__src" style="margin-top:var(--sp-5)">
-          Biomarker reductions in people who vape and don&rsquo;t smoke, versus people
-          who smoke. Real, and large. Also not the comparison that applies to you if
-          you never smoked. &mdash;
+          Real, and large. Also not the comparison that applies to you if you
+          never smoked. &mdash;
           <a href="https://www.gov.uk/government/publications/nicotine-vaping-in-england-2022-evidence-update/nicotine-vaping-in-england-2022-evidence-update-summary" target="_blank" rel="noopener noreferrer">OHID evidence review</a>
         </p>
       </div>
@@ -141,9 +161,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          It is propylene glycol and glycerine, heated until they aerosolise
-          &mdash; carrying nicotine, flavour chemicals, aldehydes made by cooking
-          the solvent, and metal picked up from the coil on the way out.
+          Solvent, heated until it aerosolises &mdash; carrying nicotine, flavour
+          chemicals, aldehydes from cooking the solvent, and metal off the coil.
         </p>
       </div>
     </div>
@@ -153,18 +172,51 @@
       findings is a page you should stop trusting around card three.
     </p>
 
-    <figure class="figure" style="margin-top:var(--sp-8);max-width:720px" data-reveal>
-      <div class="figure__frame" style="--ar:600/424">
-        <img src="assets/img/devices-fda.jpg" width="600" height="424" loading="lazy" decoding="async"
-             alt="Diagram of e-cigarette types: disposables, cartridge and tank systems, rechargeable systems, and common USB chargers.">
+    <div class="grid" style="margin-top:var(--sp-8);align-items:end">
+      <figure class="figure col-body" data-reveal>
+        <div class="figure__frame figure__frame--duo" style="--ar:1280/960;--duo:var(--toxic)">
+          <img src="assets/img/coil-tube.jpg" width="1280" height="960" loading="lazy" decoding="async"
+               alt="Macro photograph of the copper heating tube pulled out of a disposable e-cigarette, beside a bead of leaked e-liquid.">
+        </div>
+        <figcaption>
+          The heating tube out of a disposable, next to what leaked out of it.
+          This part is the difference between the two numbers on the right.
+          <span class="figure__credit">Wikimedia Commons &mdash; CC0 public domain dedication</span>
+        </figcaption>
+      </figure>
+      <div class="col-side" data-reveal>
+        <div class="stat">
+          <span class="stat__figure stat__figure--toxic"><span class="num" data-count="68.4" data-count-dp="1">68.4</span></span>
+          <span class="stat__label">Median nickel in the aerosol of 56 devices taken from daily users, in &micro;g/kg &mdash; against 2.03 &micro;g/kg in the liquid those same devices came from. The difference is the coil.</span>
+          <span class="stat__src"><a href="https://pubmed.ncbi.nlm.nih.gov/29467105/" target="_blank" rel="noopener noreferrer">Olmedo et al., Environmental Health Perspectives</a></span>
+        </div>
       </div>
-      <figcaption>
-        The product category, as the US regulator draws it. The disposables on the
-        left are the ones that grew fastest &mdash; and the ones that got
-        simultaneously cheaper per millilitre and stronger.
-        <span class="figure__credit">US Food and Drug Administration &mdash; public domain</span>
-      </figcaption>
-    </figure>
+    </div>
+
+    <div class="grid" style="margin-top:var(--sp-8)">
+      <figure class="figure col-body" data-reveal>
+        <div class="figure__frame figure__frame--duo" style="--ar:600/424;--duo:var(--toxic)">
+          <img src="assets/img/devices-fda.jpg" width="600" height="424" loading="lazy" decoding="async"
+               alt="Diagram of e-cigarette types: disposables, cartridge and tank systems, rechargeable systems, and common USB chargers.">
+        </div>
+        <figcaption>
+          The category as the US regulator draws it. Disposables grew fastest &mdash;
+          and got cheaper per millilitre while getting stronger.
+          <span class="figure__credit">US Food and Drug Administration &mdash; public domain</span>
+        </figcaption>
+      </figure>
+      <figure class="figure col-side" data-reveal>
+        <div class="figure__frame figure__frame--duo" style="--ar:960/1416;--duo:var(--toxic)">
+          <img src="assets/img/parts-cdc.jpg" width="960" height="1416" loading="lazy" decoding="async"
+               alt="Three vape devices shown intact and then exploded into labelled parts: battery, mouthpiece, clear tank, air flow base and heating element.">
+        </div>
+        <figcaption>
+          Where the coil sits. Every device here has one, and it is the only
+          component that gets hot enough to shed.
+          <span class="figure__credit">Mandie Mills / CDC &mdash; public domain</span>
+        </figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -178,10 +230,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          Because it was engineered to be. Nicotine salts removed the harshness
-          that used to cap how much anyone could take in one go. The device in your
-          pocket is not beating your willpower &mdash; it is doing exactly what it
-          was designed to do, to a person whose brain works normally.
+          Because it was engineered to be. The device isn&rsquo;t beating your
+          willpower &mdash; it is doing exactly what it was built to do.
         </p>
       </div>
     </div>
@@ -199,10 +249,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          Long-range cancer statistics change nobody&rsquo;s behaviour and we are not
-          going to pretend otherwise. These are the effects with evidence behind
-          them on a timescale you can actually feel &mdash; including one card
-          about what nobody has measured at all.
+          Cancer statistics from 2050 change nobody&rsquo;s behaviour. These are
+          effects on a timescale you can feel.
         </p>
       </div>
     </div>
@@ -220,10 +268,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          These products have existed for about fifteen years. That is not long
-          enough to know what they do across a lifetime, and anyone telling you
-          otherwise &mdash; in either direction &mdash; is guessing. Here is where
-          the line actually falls.
+          These products are about fifteen years old. Anyone certain about the
+          lifetime risk &mdash; in either direction &mdash; is guessing.
         </p>
       </div>
     </div>
@@ -233,12 +279,11 @@
       <div class="col-body prose" data-reveal>
         <p class="kicker">The shape of the uncertainty</p>
         <p>
-          Notice that those three cards disagree with each other. One says
-          <em>established</em>. One says <em>not shown</em>. One says
-          <em>conclusive &mdash; and also far lower than smoking</em>. That is not
-          hedging. It is genuinely what the field looks like right now, and
-          flattening it into one frightening sentence would be lying to you about
-          something you can go and check in an afternoon.
+          Those three cards disagree with each other. One says
+          <em>established</em>, one says <em>not shown</em>, one says
+          <em>conclusive &mdash; and far lower than smoking</em>. That is not
+          hedging. Flattening it into one frightening sentence would be lying to
+          you about something you can check in an afternoon.
         </p>
       </div>
       <div class="col-side" data-reveal>
@@ -253,6 +298,17 @@
           </figcaption>
         </figure>
       </div>
+      <figure class="figure col-full" data-reveal style="margin-top:var(--sp-6)">
+        <div class="figure__frame figure__frame--duo" style="--ar:475/378;--duo:var(--alarm);max-width:620px">
+          <img src="assets/img/lung-structure-nhlbi.jpg" width="475" height="378" loading="lazy" decoding="async"
+               alt="Two-panel medical diagram: normal lungs in the chest, and a detailed cross-section showing bronchioles, alveoli, the capillary network and surfactant.">
+        </div>
+        <figcaption>
+          The scale the argument is actually about. Aerosol has to reach the
+          alveoli &mdash; the sacs on the right &mdash; to get into blood.
+          <span class="figure__credit">US National Heart, Lung, and Blood Institute &mdash; public domain</span>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -267,10 +323,9 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          In a survey of 4,072 people who vape in Great Britain, average spend hit
-          <strong>&pound;8.39 a week</strong> by April 2025 &mdash; up 37% in real
-          terms since 2021, and rising fastest among the youngest. That is roughly
-          &pound;436 a year, leaving in amounts too small to notice.
+          Average spend among 4,072 British vapers hit <strong>&pound;8.39 a
+          week</strong> by April 2025. Roughly &pound;436 a year, leaving in
+          amounts too small to notice.
         </p>
       </div>
     </div>
@@ -376,9 +431,8 @@
           </div>
           <p class="fact__src" style="margin-top:var(--sp-4)" data-c-chart-note></p>
           <p class="fact__src" style="margin-top:var(--sp-3)">
-            7% a year is an illustration, not a promise &mdash; real returns vary and
-            can be negative. The point is the gap between the two lines, not the exact
-            height of either.
+            7% a year is an illustration, not a promise. The point is the gap
+            between the two lines, not the height of either.
           </p>
         </div>
       </div>
@@ -388,15 +442,24 @@
       <div class="col-body prose" data-reveal>
         <p class="kicker">Why it never feels expensive</p>
         <p>
-          Between 2020 and 2022 the price of a US disposable rose from $8.49 to
-          $14.07 &mdash; while the price of the liquid inside <strong>fell 69%</strong>,
-          from $7.96 to $2.45 a millilitre. Each device costs more and holds far
-          more. You are not imagining that it feels like the same spend. You are
-          getting an excellent deal on a larger quantity of the thing you would
-          rather use less of.
+          Between 2020 and 2022 a US disposable went from $8.49 to $14.07 &mdash;
+          while the liquid inside <strong>fell 69%</strong>, from $7.96 to $2.45 a
+          millilitre. You are getting an excellent deal on a larger quantity of
+          the thing you would rather use less of.
         </p>
       </div>
       <div class="col-side" data-reveal>
+        <figure class="figure" style="margin-bottom:var(--sp-6)">
+          <div class="figure__frame figure__frame--duo" style="--ar:960/1707;--duo:var(--alarm);max-width:340px">
+            <img src="assets/img/waste-tin.jpg" width="960" height="1707" loading="lazy" decoding="async"
+                 alt="A tin packed with dirty discarded disposable vapes in pink, coral, teal and green, collected from a street during a litter pick.">
+          </div>
+          <figcaption>
+            One street, one afternoon. Every one of these was bought, used and
+            thrown away by somebody who did not add it up either.
+            <span class="figure__credit">Gs&auml;lzb&auml;r &mdash; CC0 public domain dedication</span>
+          </figcaption>
+        </figure>
         <div class="stat">
           <span class="stat__figure stat__figure--plain"><span class="num" data-count="69" data-count-dp="0">69</span>%</span>
           <span class="stat__label">Fall in the price per millilitre of e-liquid in US disposables, 2020&ndash;2022, while the sticker price rose 66%.</span>
@@ -412,13 +475,12 @@
   <div class="shell grid">
     <div class="col-head shead" data-reveal>
       <span class="shead__no">07 &mdash; Fact check</span>
-      <h2 class="display display--h2">Eight things people say. <em>Checked.</em></h2>
+      <h2 class="display display--h2">Eight things people say. <span class="hl hl--in">Checked.</span></h2>
     </div>
     <div class="col-side prose" data-reveal>
       <p>
         Several of these are things the anti-vaping side gets wrong. One of those
-        is first, on purpose &mdash; if this page will correct its own side, you
-        can weigh the rest accordingly.
+        is first, on purpose.
       </p>
     </div>
     <div class="col-full" data-reveal>
@@ -426,6 +488,22 @@
     </div>
   </div>
 </section>
+
+<!-- ═══ TICKER ═════════════════════════════════════════════════════════ -->
+<div class="marquee marquee--acid">
+  <div class="marquee__track">
+    <span class="marquee__item">Nobody has run the famous recovery chart for vaping</span>
+    <span class="marquee__item">56 devices tested straight from daily users</span>
+    <span class="marquee__item">Metals over health limits in close to half the samples or more</span>
+    <span class="marquee__item">Nicotine salts removed the harshness that used to cap the dose</span>
+  </div>
+  <div class="marquee__track" aria-hidden="true">
+    <span class="marquee__item">Nobody has run the famous recovery chart for vaping</span>
+    <span class="marquee__item">56 devices tested straight from daily users</span>
+    <span class="marquee__item">Metals over health limits in close to half the samples or more</span>
+    <span class="marquee__item">Nicotine salts removed the harshness that used to cap the dose</span>
+  </div>
+</div>
 
 <!-- ═══ 08 · RECOVERY ══════════════════════════════════════════════════ -->
 <section class="band band--bone" id="stop">
@@ -437,9 +515,8 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          Shorter and less dramatic than the graphics you have seen &mdash; because
-          this one contains only things that have actually been measured, and it
-          ends with the part nobody has studied yet.
+          Shorter and less dramatic than the graphics you have seen &mdash;
+          because this one only contains things that were measured.
         </p>
       </div>
     </div>
@@ -469,17 +546,12 @@
     <aside class="col-note" data-reveal>
       <div class="prose" style="font-size:var(--t-small)">
         <p>
-          Twelve questions. Several have an answer that sounds like anti-vaping
-          propaganda and isn&rsquo;t, and at least one where the correct answer is
-          that the scary version is wrong.
-        </p>
-        <p>
-          Every explanation links to the study it came from, so you can check any
-          of it rather than taking this page&rsquo;s word for it.
+          Twelve questions. At least one has a correct answer that is
+          &ldquo;the scary version is wrong&rdquo;.
         </p>
       </div>
       <p class="fact__src" style="margin-top:var(--sp-5)">
-        Nothing is saved, scored against you, or sent anywhere. Press <b>1</b>&ndash;<b>4</b>
+        Nothing is saved or sent anywhere. Press <b>1</b>&ndash;<b>4</b>
         to answer and <b>Enter</b> to move on.
       </p>
     </aside>
@@ -496,10 +568,9 @@
       </div>
       <div class="col-side prose" data-reveal>
         <p>
-          Worth knowing before you try: in that trial, motivated daily vapers on
-          weekly counselling plus a placebo reached 14%. With medication, 51%. If
-          stopping has been hard, the problem was never you &mdash; it was doing it
-          without the thing that works.
+          In that trial, motivated daily vapers on counselling plus a placebo
+          reached 14%. With medication, <strong>51%</strong>. If stopping has been
+          hard, the problem was never you.
         </p>
       </div>
     </div>
@@ -532,8 +603,7 @@
       <p class="foot__note">
         This is a persuasion piece and it says so. It is not medical advice.
         If you are vaping to stay off cigarettes, that is a genuinely different
-        situation with genuinely different evidence &mdash; talk to a stop-smoking
-        service rather than taking a website&rsquo;s word for it.
+        situation with different evidence &mdash; talk to a stop-smoking service.
       </p>
       <button class="btn" type="button" data-share>Share this page</button>
     </div>
@@ -549,6 +619,7 @@
 <script src="assets/js/render.js"></script>
 <script src="assets/js/calculator.js"></script>
 <script src="assets/js/quiz.js"></script>
+<script src="assets/js/vapour.js"></script>
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/main.js"></script>
 </body>

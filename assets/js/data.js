@@ -91,49 +91,49 @@ window.VB = {
     {
       formula: "C₃H₈O₂ + C₃H₈O₃",
       name: "Propylene glycol and glycerine",
-      what: "The fog itself. Both are harmless to swallow — they are in food and fog machines. The problem is that heating them is how every compound below gets made.",
+      what: "The fog itself. Both are harmless to swallow — food and fog machines use them. Heating them is how everything below gets made.",
       alsoIn: "heat the solvent, and it stops being the solvent"
     },
     {
       formula: "CH₂O",
       name: "Formaldehyde",
-      what: "Made by cooking the solvent. The famous claim that vapes emit more of it than cigarettes came from a machine run at 5.0 V, a setting real users reject as unsmokable. At a realistic 4.0 V it fell from 718 to 20 µg per 10 puffs. But the honest replacement number still isn't comfortable: a day of realistic vaping came out only about a third below a 20-a-day smoker.",
+      what: "Made by cooking the solvent. The famous “more than cigarettes” claim came from a machine run at 5.0 V, which real users reject as unsmokable — at a realistic 4.0 V it fell from 718 to 20 µg per 10 puffs. The honest replacement number is still only about a third below a 20-a-day smoker.",
       alsoIn: "thermal breakdown, worse the harder you run the coil"
     },
     {
       formula: "Ni",
       name: "Nickel",
-      what: "Not in the liquid you bought — picked up on the way out. In 56 devices taken from daily users, median nickel was 68.4 µg/kg in the aerosol against 2.03 µg/kg in the bottle it came from.",
+      what: "Not in the liquid you bought — picked up on the way out. In 56 devices taken from daily users, median nickel was 68.4 µg/kg in the aerosol against 2.03 in the bottle.",
       alsoIn: "the heating coil, shedding into what you inhale"
     },
     {
       formula: "Pb · Cr · Mn",
       name: "Lead, chromium, manganese",
-      what: "Same route as the nickel. Across those 56 real-world devices, aerosol metal levels exceeded health-based limits in close to half the samples or more, for chromium, manganese, nickel and lead.",
+      what: "Same route as the nickel. Across those 56 devices, aerosol metals exceeded health-based limits in close to half the samples or more.",
       alsoIn: "coil, solder and plating"
     },
     {
       formula: "C₄H₆O₂",
       name: "Diacetyl",
-      what: "The butter-flavour chemical. Found in 39 of 51 flavours in a Harvard analysis, at up to 239 µg per device. Banned from e-liquid in the UK and EU since 2016 — and not banned in the US, so where your liquid was made genuinely matters.",
+      what: "The butter-flavour chemical. Found in 39 of 51 flavours at up to 239 µg per device. Banned from UK and EU e-liquid since 2016 — not banned in the US, so where yours was made matters.",
       alsoIn: "sweet and buttery flavourings"
     },
     {
       formula: "C₁₀H₁₄N₂",
       name: "Nicotine",
-      what: "The reason the device is still in your pocket. Salt formulations let far more of it go down without the harshness that used to stop people — which is why the modern ones are harder to put down than the old ones were.",
+      what: "The reason the device is still in your pocket. Salt formulations let far more of it down without the harshness that used to stop people.",
       alsoIn: "the entire commercial point of the product"
     },
     {
       formula: "NNAL",
       name: "What is NOT in it",
-      what: "This matters for trusting the rest of the page. Measured in real people, exclusive vapers carried 98% less NNAL — a tobacco-specific carcinogen marker — than smokers. That gap is real and it is enormous. Vaping is not smoking.",
+      what: "Measured in real people, exclusive vapers carried 98% less NNAL — a tobacco-specific carcinogen marker — than smokers. That gap is real and enormous. Vaping is not smoking.",
       alsoIn: "the strongest argument in vaping's favour, stated plainly"
     },
     {
       formula: "n = 0",
       name: "And what nobody found",
-      what: "There has never been a confirmed case of popcorn lung caused by vaping. Cancer Research UK says so flatly. If someone told you otherwise, they were repeating a claim the evidence does not support — and that is exactly why the rest of this page sticks to what does.",
+      what: "There has never been a confirmed case of popcorn lung caused by vaping. Cancer Research UK says so flatly. If someone told you otherwise, they were repeating something the evidence does not support.",
       alsoIn: "the myth that discredits everyone who repeats it"
     }
   ],
@@ -141,22 +141,22 @@ window.VB = {
   /* ---- 03 · Dependence -------------------------------------------------- */
   headFacts: [
     {
-      title: "It got harder to stop because it was redesigned to be",
-      body: "Nicotine salts were the change. They cut the harshness that used to make high doses unpleasant, so a much larger dose goes down smoothly. The device that is hard to put down isn't a failure of willpower — it is a product that works.",
+      title: "Redesigned to be harder to stop",
+      body: "Nicotine salts cut the harshness that used to make high doses unpleasant, so a much larger dose goes down smoothly. Hard to put down isn't a failure of willpower — it is a product working.",
       evidence: "high",
       source: "NASEM, Public Health Consequences of E-Cigarettes",
       sourceUrl: "https://nap.nationalacademies.org/catalog/24952/public-health-consequences-of-e-cigarettes"
     },
     {
-      title: "Half of young vapers now report strong daily urges",
-      body: "Among US young people who vape, the share reporting strong cravings every day rose from 31.6% to 50.3%. Fewer teenagers vape than in 2019 — but the ones who still do are markedly more hooked than the ones who came before them.",
+      title: "Half now report daily cravings",
+      body: "Among US young people who vape, daily strong cravings rose from 31.6% to 50.3%. Fewer teenagers vape than in 2019 — the ones who still do are markedly more hooked.",
       evidence: "high",
       source: "Nicotine & Tobacco Research, PMID 38531767",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/38531767/"
     },
     {
-      title: "Trying hard, alone, mostly does not work — and that is not your fault",
-      body: "In a randomised trial of 261 people aged 16–25 who vaped daily and wanted to stop, those given counselling plus a placebo hit 14% abstinence. Referral to a text-support programme alone: 6%. Add varenicline and it was 51%. The gap is the medication, not the motivation.",
+      title: "Willpower alone mostly fails",
+      body: "In a trial of 261 daily vapers aged 16–25 who wanted to stop: counselling plus placebo, 14%. Text support alone, 6%. Add varenicline, 51%. The gap is the medication, not the motivation.",
       evidence: "high",
       source: "Evins et al., JAMA 2025;333(21):1876–1886",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/40266580/"
@@ -167,42 +167,42 @@ window.VB = {
   visibleFacts: [
     {
       title: "Your sleep, on the nights you vape",
-      body: "Tracked day by day in young adults, the days they vaped nicotine carried 40% higher adjusted odds of getting under seven hours that night. Their <em>rated</em> sleep quality didn't change — so this is a thing that happens to you without you noticing it happening.",
+      body: "Tracked day by day in young adults, days they vaped nicotine carried 40% higher adjusted odds of under seven hours' sleep. Their <em>rated</em> sleep quality didn't change — it happens without you noticing.",
       evidence: "medium",
       source: "PMID 42637626 — within-person study, association not proof of cause",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/42637626/"
     },
     {
       title: "The anxiety it settles is mostly the anxiety it caused",
-      body: "The calm is real. It is also, in a dependent user, largely withdrawal being switched off — you are topping up to get back to baseline, not rising above it. Pooled across 102 studies and 169,500 people, stopping nicotine was associated with <strong>less</strong> anxiety and depression afterwards, not more.",
+      body: "The calm is real. In a dependent user it is largely withdrawal being switched off — topping up to baseline, not rising above it. Across 102 studies and 169,500 people, stopping nicotine was associated with <strong>less</strong> anxiety and depression, not more.",
       evidence: "high",
       source: "Cochrane review, PMID 33687070",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/33687070/"
     },
     {
       title: "Your heart rate, within minutes, every time",
-      body: "A single nicotine vaping session raised heart rate by 18 bpm and blood pressure by 12/10 mmHg. In the same trial the nicotine-free version and the sham did nothing measurable. This one is not disputed by anybody.",
+      body: "A single nicotine vaping session raised heart rate 18 bpm and blood pressure 12/10 mmHg. The nicotine-free version and the sham did nothing measurable. Nobody disputes this one.",
       evidence: "high",
       source: "Randomised crossover trial, PMID 29991814",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/29991814/"
     },
     {
       title: "What nobody has actually measured",
-      body: "You have probably seen the wrinkles-and-grey-skin warnings. No study has measured skin ageing, collagen or wrinkles in vapers — every one of those images comes from cigarette research. The one controlled study that tested vapers' taste and smell found no loss at all. We are telling you this because it is true, and because a page that only tells you the bad half isn't worth reading.",
+      body: "You have seen the wrinkles-and-grey-skin warnings. No study has measured skin ageing or collagen in vapers — those images all come from cigarette research. The one controlled study of vapers' taste and smell found no loss. A page that only tells you the bad half isn't worth reading.",
       evidence: "low",
       source: "Stated as an evidence gap, not a finding",
       sourceUrl: ""
     },
     {
       title: "If you are ever pregnant, or might be",
-      body: "Women who vaped during pregnancy and did not smoke at all had 1.88 times the rate of low birth weight, with a dose-response. Safer than smoking is not the same as safe, and this is the one place where the distinction stops being academic.",
+      body: "Women who vaped in pregnancy and never smoked had 1.88 times the rate of low birth weight, with a dose-response. Safer than smoking is not the same as safe.",
       evidence: "medium",
       source: "PMID 34259468 — observational, exclusive vapers vs non-users",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/34259468/"
     },
     {
       title: "The bit that lands on other people",
-      body: "In one year, US poison centres logged 7,043 e-cigarette exposure cases. 6,074 of them — 87.8% — were children under five. Sweet-smelling liquid, bright device, low shelf. This is the harm that isn't yours to accept on anyone's behalf.",
+      body: "In one year US poison centres logged 7,043 e-cigarette exposures. 6,074 — 87.8% — were children under five. Sweet liquid, bright device, low shelf.",
       evidence: "high",
       source: "CDC MMWR 2023;72(25):694–695",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/37347709/"
@@ -213,21 +213,21 @@ window.VB = {
   bodyFacts: [
     {
       title: "Established: the acute effects",
-      body: "The American Heart Association's position is that nicotine e-cigarettes cause acute changes in blood pressure and heart rate, and that flavouring agents carry independent risks — while long-term cardiovascular effects remain genuinely unknown, because the products have only existed for about fifteen years.",
+      body: "The American Heart Association's position: nicotine e-cigarettes cause acute changes in blood pressure and heart rate, flavourings carry independent risks, and long-term cardiovascular effects remain genuinely unknown.",
       evidence: "high",
       source: "American Heart Association scientific statement",
       sourceUrl: "https://newsroom.heart.org/news/current-evidence-identifies-health-risks-of-e-cigarette-use-long-term-research-needed"
     },
     {
       title: "Not established: blood-vessel damage",
-      body: "You may have read that vapers have smoker-level artery damage. Pooled across studies, the difference in flow-mediated dilation between vapers and non-users was −1.47% with a confidence interval from −3.96 to +1.02 — which crosses zero. That is a finding of \"not shown\", and we are not going to dress it up as anything else.",
+      body: "You may have read that vapers have smoker-level artery damage. Pooled, the difference in flow-mediated dilation was −1.47%, CI −3.96 to +1.02 — it crosses zero. That is a finding of \"not shown\", and we won't dress it up.",
       evidence: "high",
       source: "Meta-analysis, PMID 38779295",
       sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/38779295/"
     },
     {
       title: "Conclusive: it emits toxic substances",
-      body: "The US National Academies reviewed the field and reached two conclusions at once — there is conclusive evidence that e-cigarettes emit numerous potentially toxic substances, and substantial evidence that exposure is far lower than from cigarettes. Both halves are true. Only quoting one of them is how this argument usually goes wrong.",
+      body: "The US National Academies reached two conclusions at once: conclusive evidence that e-cigarettes emit numerous potentially toxic substances, and substantial evidence that exposure is far lower than from cigarettes. Quoting only one half is how this argument usually goes wrong.",
       evidence: "high",
       source: "National Academies of Sciences, Engineering, and Medicine, 2018",
       sourceUrl: "https://nap.nationalacademies.org/catalog/24952/public-health-consequences-of-e-cigarettes"
@@ -444,9 +444,17 @@ window.VB = {
     { title: "CDC — Vaping and quitting", url: "https://www.cdc.gov/tobacco/e-cigarettes/quitting.html", note: "quitline numbers and text programmes" }
   ],
 
+  /* Every image on this page is public domain or CC0 and is served from this
+     repository rather than hotlinked. Anything under a CC-BY or share-alike
+     licence was rejected, however good it looked. */
   imageCredits: [
-    { title: "E-cigarette device types", url: "https://commons.wikimedia.org/wiki/File:Disposable_and_rechargeable_e-cigarette_devices_and_common_chargers_2.jpg", credit: "US Food and Drug Administration — public domain" },
-    { title: "Human lungs illustration", url: "https://commons.wikimedia.org/wiki/File:Human_Lungs_(NIH_BioArt_231_-_630887).png", credit: "NIH BioArt, Ryan Kissinger / NIAID — public domain" }
+    { title: "E-cigarette device types", url: "https://commons.wikimedia.org/wiki/File:Disposable_and_rechargeable_e-cigarette_devices_and_common_chargers.jpg", credit: "US Food and Drug Administration — public domain" },
+    { title: "Human lungs illustration", url: "https://bioart.niaid.nih.gov/bioart/231", credit: "NIH BioArt, Ryan Kissinger / NIAID — public domain" },
+    { title: "E-cigarettes under test in a CDC laboratory", url: "https://phil.cdc.gov/Details.aspx?pid=23264", credit: "CDC / Von Roebuck, photo by Lauren Bishop, Public Health Image Library #23264 — public domain" },
+    { title: "Heating tube from a disposable e-cigarette", url: "https://commons.wikimedia.org/wiki/File:Disposable_electronic_cigarette_copper_tube.jpg", credit: "Wikimedia Commons — CC0 public domain dedication" },
+    { title: "Various parts of e-cigarette devices", url: "https://commons.wikimedia.org/wiki/File:Various_Parts_of_E-Cigarette_Devices.jpg", credit: "Mandie Mills, US Centers for Disease Control and Prevention — public domain" },
+    { title: "Normal lung structure", url: "https://commons.wikimedia.org/wiki/File:Lung_structure_normal.jpg", credit: "US National Heart, Lung, and Blood Institute — public domain" },
+    { title: "Collected disposable e-cigarette waste", url: "https://commons.wikimedia.org/wiki/File:Collected_e-cigarettes_waste_in_a_tin.jpg", credit: "Gsälzbär — CC0 public domain dedication" }
   ],
 
   /* ---- 09 · Quiz -------------------------------------------------------- */

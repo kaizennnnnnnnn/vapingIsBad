@@ -1,5 +1,9 @@
 /* ==========================================================================
    components.css — reusable UI parts
+
+   House style: 2px hard rules, zero blur, offset colour shadows in place of
+   drop shadows, and hover states that lift the object off the page rather
+   than tinting it. Nothing here uses a uniform corner radius.
    ========================================================================== */
 
 /* --- Reading progress --------------------------------------------------- */
@@ -7,7 +11,7 @@
 .progress {
   position: fixed;
   inset: 0 0 auto 0;
-  height: 2px;
+  height: 3px;
   z-index: 90;
   background: transparent;
   pointer-events: none;
@@ -35,7 +39,7 @@
   background: color-mix(in srgb, var(--ink-050) 78%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  border-bottom: 1px solid transparent;
+  border-bottom: 2px solid transparent;
   transition: border-color var(--d-mid) var(--ease-out),
     background var(--d-mid) var(--ease-out);
 }
@@ -50,6 +54,7 @@
   gap: var(--sp-3);
   font-family: var(--font-mono);
   font-size: var(--t-micro);
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tx-mid);
@@ -58,14 +63,13 @@
 
 .masthead__mark b {
   color: var(--tx-hi);
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .masthead__dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   background: var(--alarm);
-  border-radius: 50%;
   animation: pulse 2.6s var(--ease-in-out) infinite;
 }
 
@@ -73,17 +77,18 @@
   0%,
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(45deg);
   }
   50% {
     opacity: 0.45;
-    transform: scale(0.8);
+    transform: scale(0.7) rotate(45deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .masthead__dot {
     animation: none;
+    transform: rotate(45deg);
   }
 }
 
@@ -92,6 +97,7 @@
   gap: var(--sp-5);
   font-family: var(--font-mono);
   font-size: var(--t-micro);
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -105,13 +111,32 @@
 .masthead__links a {
   color: var(--tx-lo);
   text-decoration: none;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.masthead__links a::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: var(--alarm);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--d-fast) var(--ease-out);
 }
 
 .masthead__links a:hover {
   color: var(--tx-hi);
 }
 
-/* --- Buttons ------------------------------------------------------------ */
+.masthead__links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* --- Buttons ------------------------------------------------------------
+   The offset shadow is the affordance: hover lifts the button away from it,
+   active drops the button back onto it. No blur, no gradient, no scale. */
 
 .btn {
   display: inline-flex;
@@ -120,25 +145,30 @@
   padding: 0.85em 1.5em;
   font-family: var(--font-mono);
   font-size: var(--t-small);
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid var(--ink-400);
+  border: 2px solid var(--tx-hi);
   color: var(--tx-hi);
   background: transparent;
-  border-radius: var(--r-hair);
+  border-radius: var(--r-sharp);
+  box-shadow: 0 0 0 0 var(--alarm);
   transition: background var(--d-fast) var(--ease-out),
     border-color var(--d-fast) var(--ease-out),
-    color var(--d-fast) var(--ease-out), transform var(--d-fast) var(--ease-out);
+    color var(--d-fast) var(--ease-out),
+    box-shadow var(--d-fast) var(--ease-out),
+    transform var(--d-fast) var(--ease-out);
 }
 
 .btn:hover {
-  border-color: var(--tx-hi);
-  background: color-mix(in srgb, var(--tx-hi) 7%, transparent);
+  transform: translate(-3px, -3px);
+  box-shadow: var(--off-2) var(--alarm);
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 0 var(--alarm);
 }
 
 .btn--solid {
@@ -148,9 +178,7 @@
 }
 
 .btn--solid:hover {
-  background: #fff;
-  border-color: #fff;
-  color: var(--ink-000);
+  box-shadow: var(--off-2) var(--tx-hi);
 }
 
 .btn--jade {
@@ -160,9 +188,7 @@
 }
 
 .btn--jade:hover {
-  background: #fff;
-  border-color: #fff;
-  color: var(--ink-000);
+  box-shadow: var(--off-2) var(--tx-hi);
 }
 
 .btn[disabled] {
@@ -178,19 +204,28 @@
   transform: translateX(4px);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover {
+    transform: none;
+  }
+}
+
 /* --- Stat --------------------------------------------------------------- */
 
 .stat {
   display: block;
 }
 
+/* Set in the condensed display face rather than the mono: at this size the
+   numerals are the picture, and mono numerals read as a table cell. */
 .stat__figure {
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: var(--t-figure);
-  line-height: 0.86;
+  line-height: 0.82;
   letter-spacing: -0.055em;
-  font-weight: 500;
   color: var(--alarm);
   display: block;
 }
@@ -233,9 +268,7 @@
 
 .facts {
   display: grid;
-  gap: 1px;
-  background: var(--ink-400);
-  border-block: 1px solid var(--ink-400);
+  gap: var(--sp-4);
 }
 
 @media (min-width: 700px) {
@@ -251,38 +284,70 @@
 }
 
 .fact {
-  background: var(--ink-050);
-  padding: var(--sp-6) var(--sp-5) var(--sp-7);
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-100);
+  border: 2px solid var(--ink-400);
+  padding: var(--sp-6) var(--sp-5) var(--sp-6);
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  transition: background var(--d-mid) var(--ease-out);
+  transition: transform var(--d-mid) var(--ease-out),
+    box-shadow var(--d-mid) var(--ease-out),
+    border-color var(--d-mid) var(--ease-out);
 }
 
 .band--bone .fact {
-  background: var(--bone-100);
+  background: var(--bone-000);
+  border-color: var(--bone-300);
 }
 
 .fact:hover {
-  background: var(--ink-100);
+  transform: translate(-4px, -4px);
+  box-shadow: var(--off-3) var(--alarm);
+  border-color: var(--tx-hi);
 }
 
-.band--bone .fact:hover {
-  background: var(--bone-000);
+@media (prefers-reduced-motion: reduce) {
+  .fact:hover {
+    transform: none;
+  }
 }
 
+/* The index is a watermark, not a label — big, hollow, cropped by the card. */
 .fact__idx {
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: 0.14em;
-  color: var(--alarm);
+  position: absolute;
+  top: -0.2em;
+  right: 0.04em;
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink-400);
+  pointer-events: none;
+  transition: -webkit-text-stroke-color var(--d-mid) var(--ease-out);
+}
+
+.band--bone .fact__idx {
+  -webkit-text-stroke-color: var(--bone-300);
+}
+
+.fact:hover .fact__idx {
+  -webkit-text-stroke-color: var(--alarm);
 }
 
 .fact__title {
   font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
   font-size: var(--t-h3);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 1.02;
+  letter-spacing: var(--tr-h3);
+  position: relative;
+  max-width: 18ch;
 }
 
 .fact__body {
@@ -313,17 +378,20 @@
 
 .tag {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   gap: 0.45em;
-  padding: 0.28em 0.6em;
+  padding: 0.35em 0.6em 0.3em;
   font-family: var(--font-mono);
   font-size: var(--t-micro);
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border: 1px solid currentColor;
-  border-radius: var(--r-hair);
+  border: 2px solid currentColor;
+  border-radius: var(--r-sharp);
   color: var(--tx-lo);
   white-space: nowrap;
+  transform: rotate(-1.2deg);
 }
 
 .tag--high {
@@ -346,28 +414,67 @@
   position: relative;
   overflow: hidden;
   background: var(--ink-200);
-  border: 1px solid var(--ink-400);
+  border: 2px solid var(--ink-400);
+  transition: transform var(--d-slow) var(--ease-out),
+    box-shadow var(--d-slow) var(--ease-out);
+}
+
+.figure:hover .figure__frame {
+  transform: translate(-4px, -4px);
+  box-shadow: var(--off-3) var(--alarm);
 }
 
 .figure__frame img {
   width: 100%;
   aspect-ratio: var(--ar, 4 / 3);
   object-fit: cover;
-  filter: grayscale(0.35) contrast(1.06);
   transition: filter var(--d-slow) var(--ease-out),
     transform var(--d-slow) var(--ease-out);
 }
 
-.figure:hover .figure__frame img {
-  filter: grayscale(0) contrast(1);
-  transform: scale(1.02);
+/* Duotone plate. The images on this page come from half a dozen federal
+   archives and look nothing like each other; flattening them to luminance
+   and re-tinting with a page colour is what makes them read as one set.
+   Hovering returns the original, so nothing is hidden from the reader. */
+.figure__frame--duo img {
+  filter: grayscale(1) contrast(1.14) brightness(0.94);
+}
+
+.figure__frame--duo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--duo, var(--alarm));
+  mix-blend-mode: color;
+  opacity: 0.62;
+  pointer-events: none;
+  transition: opacity var(--d-slow) var(--ease-out);
+}
+
+.figure:hover .figure__frame--duo img {
+  filter: none;
+  transform: scale(1.03);
+}
+
+.figure:hover .figure__frame--duo::after {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure:hover .figure__frame {
+    transform: none;
+  }
+  .figure:hover .figure__frame--duo img {
+    transform: none;
+  }
 }
 
 .figure figcaption {
-  margin-top: var(--sp-3);
+  margin-top: var(--sp-4);
   font-size: var(--t-small);
   line-height: 1.5;
   color: var(--tx-mid);
+  max-width: 48ch;
 }
 
 .figure__credit {
@@ -376,6 +483,20 @@
   font-family: var(--font-mono);
   font-size: var(--t-micro);
   color: var(--tx-faint);
+}
+
+/* Illustrations that are line art on transparency, not photographs — they
+   want breathing room and no duotone or zoom treatment. */
+.img--plate {
+  object-fit: contain !important;
+  padding: 9%;
+  filter: none !important;
+  opacity: 0.82;
+}
+
+.figure:hover .img--plate {
+  transform: none;
+  opacity: 1;
 }
 
 /* --- Bar chart (pure CSS/SVG-free) -------------------------------------- */
@@ -404,19 +525,22 @@
 
 .bar__value {
   font-family: var(--font-mono);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: var(--t-small);
   color: var(--tx-hi);
 }
 
 .bar__track {
-  height: 10px;
+  height: 12px;
   background: var(--ink-300);
+  border: 2px solid var(--ink-400);
   overflow: hidden;
 }
 
 .band--bone .bar__track {
-  background: var(--bone-300);
+  background: var(--bone-200);
+  border-color: var(--bone-300);
 }
 
 .bar__fill {
@@ -440,11 +564,12 @@
 /* --- Disclosure / accordion --------------------------------------------- */
 
 .disclosure {
-  border-top: 1px solid var(--ink-400);
+  border-top: 2px solid var(--ink-400);
+  transition: background var(--d-fast) var(--ease-out);
 }
 
 .disclosure:last-child {
-  border-bottom: 1px solid var(--ink-400);
+  border-bottom: 2px solid var(--ink-400);
 }
 
 .disclosure__btn {
@@ -453,20 +578,28 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--sp-5);
-  padding: var(--sp-5) 0;
+  padding: var(--sp-5) var(--sp-4) var(--sp-5) 0;
   text-align: left;
-  transition: color var(--d-fast) var(--ease-out);
+  transition: color var(--d-fast) var(--ease-out),
+    padding-left var(--d-mid) var(--ease-out);
 }
 
 .disclosure__btn:hover {
+  color: var(--alarm);
+  padding-left: var(--sp-4);
+}
+
+.disclosure.is-open .disclosure__btn {
   color: var(--alarm);
 }
 
 .disclosure__myth {
   font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
   font-size: var(--t-h3);
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  line-height: 1.04;
+  letter-spacing: var(--tr-h3);
 }
 
 .disclosure__myth::before {
@@ -476,32 +609,42 @@
   content: "”";
 }
 
+/* A square that rotates 45 degrees on open — a plus turning into a cross,
+   without the circle every accordion on the internet already has. */
 .disclosure__sign {
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   position: relative;
-  margin-top: 0.35em;
-  border: 1px solid currentColor;
-  border-radius: 50%;
+  margin-top: 0.3em;
+  border: 2px solid currentColor;
+  transition: transform var(--d-mid) var(--ease-back),
+    background var(--d-mid) var(--ease-out);
 }
 
 .disclosure__sign::before,
 .disclosure__sign::after {
   content: "";
   position: absolute;
-  inset: 50% 7px auto 7px;
-  height: 1px;
+  inset: 50% 6px auto 6px;
+  height: 2px;
+  margin-top: -1px;
   background: currentColor;
-  transition: transform var(--d-mid) var(--ease-out);
 }
 
 .disclosure__sign::after {
   transform: rotate(90deg);
 }
 
-.disclosure[open] .disclosure__sign::after {
-  transform: rotate(0deg);
+.disclosure.is-open .disclosure__sign {
+  transform: rotate(45deg);
+  background: var(--alarm);
+  border-color: var(--alarm);
+  color: var(--ink-000);
+}
+
+.band--bone .disclosure.is-open .disclosure__sign {
+  color: var(--bone-000);
 }
 
 .disclosure__panel {
@@ -520,8 +663,9 @@
 }
 
 .disclosure__reality {
-  padding: 0 0 var(--sp-6);
-  max-width: 66ch;
+  padding: 0 0 var(--sp-6) var(--sp-5);
+  border-left: 3px solid var(--alarm);
+  max-width: 64ch;
   color: var(--tx-mid);
   font-size: var(--t-small);
   line-height: 1.65;
@@ -534,15 +678,20 @@
 .disclosure__verdict {
   display: inline-block;
   margin-bottom: var(--sp-3);
+  padding: 0.4em 0.65em 0.35em;
+  background: var(--alarm);
+  color: #fff;
   font-family: var(--font-mono);
   font-size: var(--t-micro);
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--alarm);
+  transform: rotate(-1.6deg);
 }
 
 .disclosure__verdict--part {
-  color: var(--amber);
+  background: var(--amber);
+  color: var(--ink-000);
 }
 
 /* --- Source list -------------------------------------------------------- */
@@ -580,6 +729,7 @@
 
 .sources__n {
   font-family: var(--font-mono);
+  font-weight: 700;
   font-size: var(--t-micro);
   color: var(--alarm);
   margin-right: 0.6em;
@@ -588,20 +738,29 @@
 /* --- Pull quote ---------------------------------------------------------- */
 
 .pull {
-  margin: var(--sp-6) 0;
-  padding: var(--sp-5) 0 var(--sp-5) var(--sp-5);
-  border-left: 2px solid var(--alarm);
+  position: relative;
+  margin: var(--sp-7) 0;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5);
+  background: var(--ink-100);
+  border: 2px solid var(--alarm);
   font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 600;
   font-size: var(--t-h3);
-  line-height: 1.24;
-  letter-spacing: -0.01em;
+  line-height: 1.14;
+  letter-spacing: var(--tr-h3);
   color: var(--tx-hi);
-  max-width: 34ch;
+  max-width: 38ch;
   text-wrap: pretty;
+  box-shadow: var(--off-3) var(--alarm);
+}
+
+.band--bone .pull {
+  background: var(--bone-000);
 }
 
 .pull strong {
-  font-weight: 400;
+  font-weight: 800;
   color: var(--alarm);
 }
 
@@ -610,23 +769,10 @@
   margin-top: var(--sp-4);
   font-family: var(--font-mono);
   font-size: var(--t-micro);
+  font-weight: 400;
   font-style: normal;
   letter-spacing: 0.08em;
   line-height: 1.6;
   color: var(--tx-lo);
   text-transform: none;
-}
-
-/* Illustrations that are line art on transparency, not photographs — they
-   want breathing room and no grayscale/zoom treatment. */
-.img--plate {
-  object-fit: contain !important;
-  padding: 9%;
-  filter: none !important;
-  opacity: 0.78;
-}
-
-.figure:hover .img--plate {
-  transform: none;
-  opacity: 1;
 }
