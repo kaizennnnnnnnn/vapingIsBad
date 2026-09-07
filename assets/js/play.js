@@ -120,9 +120,13 @@
     const noteEl = dial.querySelector("[data-dial-note]");
     const btns = Array.prototype.slice.call(dial.querySelectorAll("[data-dial-v]"));
 
+    // The schematic above is the same coil. Turning the dial up runs it hot.
+    const route = document.querySelector(".route");
+
     function setStop(v) {
       const s = STOPS[v];
       if (!s) return;
+      if (route) route.classList.toggle("is-hot", v === "5");
       btns.forEach((b) =>
         b.setAttribute("aria-pressed", b.getAttribute("data-dial-v") === v ? "true" : "false")
       );

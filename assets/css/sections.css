@@ -158,65 +158,275 @@
   color: var(--bone-000);
 }
 
-/* --- Chemistry grid ----------------------------------------------------- */
+/* --- The route ----------------------------------------------------------
+   What is in the aerosol, arranged by where it gets in. A schematic of the
+   device runs across the top — tank, coil, mouthpiece — and the chemicals sit
+   in three lanes beneath the station they belong to. The third lane is what
+   is NOT there, and is drawn dashed so the absence is visible before it is
+   read. */
 
-/* Fixed column counts rather than auto-fit: the card count is known (8), and
-   an auto-fit track leaves a ragged last row. Cards now carry their own
-   borders, so a short final row reads as intentional rather than as a hole
-   in a shared grid background. */
-.chems {
+.route {
+  margin-top: var(--sp-2);
+}
+
+/* --- The schematic ------------------------------------------------------ */
+
+.route__spine {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .route__spine {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: var(--sp-5);
+    overflow: visible;
+  }
+}
+
+/* The dial that heats the coil sits below three lanes of cards, and the
+   lanes light their stations on hover. Neither means anything if the drawing
+   has scrolled away, so it pins under the masthead for the whole block —
+   on viewports tall enough to spare the room. */
+@media (min-width: 900px) and (min-height: 700px) {
+  .route__spine {
+    position: sticky;
+    top: 54px;
+    z-index: 2;
+    padding-block: var(--sp-2);
+    background: var(--ink-050);
+  }
+}
+
+.route__ink {
+  fill: none;
+  stroke: var(--ink-500);
+  stroke-width: 2;
+}
+
+.route__liquid {
+  fill: var(--toxic);
+  opacity: 0.16;
+}
+
+/* Drawn in on reveal: the dash is longer than the path, so the offset
+   sliding to zero paints the zigzag from the tank end to the mouthpiece. */
+.route__coil {
+  fill: none;
+  stroke: var(--toxic);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 720;
+  stroke-dashoffset: 720;
+  transition: stroke-dashoffset 1400ms var(--ease-out) 240ms;
+}
+
+.route__spine.is-in .route__coil {
+  stroke-dashoffset: 0;
+}
+
+.route__glow {
+  fill: none;
+  stroke: var(--toxic);
+  stroke-width: 14;
+  stroke-linejoin: round;
+  opacity: 0;
+  filter: url(#route-glow);
+  transition: opacity 900ms var(--ease-out) 1300ms;
+}
+
+.route__spine.is-in .route__glow {
+  opacity: 0.5;
+  animation: coil-pulse 2.8s var(--ease-in-out) 2.4s infinite;
+}
+
+@keyframes coil-pulse {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.66;
+  }
+}
+
+.route__puff {
+  fill: var(--tx-mid);
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+}
+
+.route__spine.is-in .route__puff {
+  opacity: 0.26;
+  transform: none;
+}
+
+.route__spine.is-in .route__puff:nth-child(1) { transition-delay: 1500ms; }
+.route__spine.is-in .route__puff:nth-child(2) { transition-delay: 1620ms; }
+.route__spine.is-in .route__puff:nth-child(3) { transition-delay: 1760ms; }
+.route__spine.is-in .route__puff:nth-child(4) { transition-delay: 1920ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .route__coil {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .route__glow {
+    opacity: 0.5;
+    transition: none;
+    animation: none;
+  }
+  .route__spine.is-in .route__glow {
+    animation: none;
+  }
+  .route__puff {
+    opacity: 0.26;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Lanes -------------------------------------------------------------- */
+
+.route__lanes {
   display: grid;
-  grid-template-columns: 1fr;
+  gap: var(--sp-7);
+}
+
+@media (min-width: 900px) {
+  .route__lanes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-6);
+    align-items: start;
+  }
+}
+
+.lane__head {
+  position: relative;
+  padding: var(--sp-4) var(--sp-3) var(--sp-4) 0;
+  margin-bottom: var(--sp-5);
+  border-top: 3px solid var(--toxic);
+  /* Opaque on purpose: this is the one text in the route with no card under
+     it, and the vapour canvas behind the band can otherwise drift it to 1:1. */
+  background: var(--ink-050);
+}
+
+.lane--absent .lane__head {
+  border-top-style: dashed;
+  border-top-color: var(--tx-lo);
+}
+
+.lane__no {
+  display: block;
+  margin-bottom: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--toxic);
+}
+
+.lane--absent .lane__no {
+  color: var(--tx-lo);
+}
+
+.lane__title {
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-size: var(--t-h3);
+  line-height: 1;
+  letter-spacing: var(--tr-h3);
+}
+
+.lane__sub {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--t-small);
+  color: var(--tx-lo);
+}
+
+.lane__slips {
+  display: grid;
   gap: var(--sp-4);
 }
 
-@media (min-width: 560px) {
-  .chems {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1080px) {
-  .chems {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
+/* --- Slips -------------------------------------------------------------- */
 
 .chem {
   position: relative;
   background: var(--ink-100);
-  border: 2px solid var(--ink-400);
+  border-top: 4px solid var(--toxic);
   padding: var(--sp-5);
-  min-height: 210px;
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
   text-align: left;
-  transition: transform var(--d-mid) var(--ease-out),
+  transform: translateY(18px) rotate(var(--chem-tilt, 0deg));
+  transition: transform var(--d-slow) var(--ease-out),
     box-shadow var(--d-mid) var(--ease-out),
-    border-color var(--d-mid) var(--ease-out);
+    background var(--d-mid) var(--ease-out);
 }
 
-.chem:hover,
-.chem:focus-visible {
-  transform: translate(-4px, -4px);
-  box-shadow: var(--off-3) var(--toxic);
-  border-color: var(--toxic);
+/* See .fact.is-in — the reveal helper zeroes transforms at (0,2,0). */
+.chem.is-in {
+  transform: rotate(var(--chem-tilt, 0deg));
+}
+
+.lane--absent .chem {
+  border-top-style: dashed;
+  border-top-color: var(--tx-lo);
+}
+
+/* The lead of the coil lane: the chemical the dial below re-runs, given the
+   weight the drawing already gives the coil. */
+.lane--heat .chem:first-child {
+  border-top-width: 8px;
+  padding: var(--sp-6) var(--sp-5);
+}
+
+.lane--heat .chem:first-child .chem__name {
+  font-size: clamp(2rem, 1.4rem + 1.4vw, 2.6rem);
+}
+
+.lane--heat .chem:first-child .chem__what {
+  font-size: var(--t-body);
+  color: var(--tx-hi);
+}
+
+@media (hover: hover) {
+  .chem:hover {
+    transform: rotate(0deg) translate(-4px, -4px);
+    box-shadow: var(--off-3) var(--toxic);
+    background: var(--ink-200);
+  }
+
+  .lane--absent .chem:hover {
+    box-shadow: var(--off-3) var(--tx-lo);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chem:hover,
-  .chem:focus-visible {
+  .chem,
+  .chem.is-in,
+  .chem:hover {
     transform: none;
   }
 }
 
 .chem__formula {
   font-family: var(--font-mono);
-  font-size: var(--t-small);
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--toxic);
+}
+
+.lane--absent .chem__formula {
+  color: var(--tx-mid);
 }
 
 .chem__name {
@@ -228,17 +438,20 @@
   letter-spacing: var(--tr-h3);
 }
 
+.chem__what {
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--tx-mid);
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+
 .chem__also {
   margin-top: auto;
-  padding-top: var(--sp-4);
-  border-top: 2px solid var(--ink-400);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--ink-400);
   font-size: var(--t-small);
   line-height: 1.4;
   color: var(--tx-lo);
-}
-
-.band--bone .chem__also {
-  border-top-color: var(--bone-300);
 }
 
 .chem__also b {
@@ -246,11 +459,8 @@
   font-weight: 700;
 }
 
-.chem__what {
-  font-size: var(--t-small);
-  line-height: 1.5;
+.lane--absent .chem__also b {
   color: var(--tx-mid);
-  margin: var(--sp-2) 0 var(--sp-5);
 }
 
 /* --- Calculator --------------------------------------------------------- */
@@ -1356,4 +1566,57 @@
 .since__n {
   color: var(--jade);
   font-variant-numeric: tabular-nums;
+}
+
+/* --- Route: lanes light their station ------------------------------------
+   Hovering a lane brightens the part of the schematic it belongs to, so the
+   diagram and the list read as one object. :has() has no fallback here and
+   needs none — without it the lanes simply do not talk to the drawing. */
+
+@media (hover: hover) {
+  .route:has(.lane--bottle:hover) .route__liquid {
+    opacity: 0.45;
+  }
+
+  .route:has(.lane--heat:hover) .route__glow {
+    opacity: 0.85;
+    animation: none;
+  }
+
+  .route:has(.lane--absent:hover) .route__puff {
+    opacity: 0.6;
+    fill: var(--tx-hi);
+  }
+}
+
+.route__liquid,
+.route__puff {
+  transition: opacity var(--d-mid) var(--ease-out), fill var(--d-mid) var(--ease-out),
+    transform 700ms var(--ease-out);
+}
+
+/* The voltage dial below runs the same coil. At 5.0 V it runs hot. */
+.route.is-hot .route__glow {
+  opacity: 0.95;
+  stroke-width: 24;
+  animation: none;
+}
+
+.route.is-hot .route__coil {
+  stroke: #f4ff9a;
+}
+
+.route__glow,
+.route__coil {
+  transition: opacity 600ms var(--ease-out), stroke-width 600ms var(--ease-out),
+    stroke 600ms var(--ease-out), stroke-dashoffset 1400ms var(--ease-out) 240ms;
+}
+
+/* Declared after the block above on purpose: same specificity, and the
+   earlier reduced-motion rule was losing to it on source order. */
+@media (prefers-reduced-motion: reduce) {
+  .route__glow,
+  .route__coil {
+    transition: none;
+  }
 }

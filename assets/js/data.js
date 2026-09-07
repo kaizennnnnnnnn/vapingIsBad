@@ -87,54 +87,69 @@ window.VB = {
   },
 
   /* ---- 02 · What is actually in the aerosol ---------------------------- */
+  /* The three stations of the route diagram, in reading order. */
+  chemStages: [
+    { key: "bottle", title: "In the bottle", sub: "What you paid for" },
+    { key: "heat",   title: "Added on the way out", sub: "What the coil puts in" },
+    { key: "absent", title: "Not in it", sub: "One genuine absence, and one near miss" }
+  ],
+
   chemicals: [
     {
       formula: "C₃H₈O₂ + C₃H₈O₃",
+      stage: "bottle",
       name: "Propylene glycol and glycerine",
-      what: "The fog itself. Both are harmless to swallow — food and fog machines use them. Heating them is how everything below gets made.",
+      what: "The fog itself. Both are harmless to swallow — food and fog machines use them. Heating them is where the formaldehyde in the next stage comes from.",
       alsoIn: "heat the solvent, and it stops being the solvent"
     },
     {
       formula: "CH₂O",
+      stage: "heat",
       name: "Formaldehyde",
       what: "Made by cooking the solvent. The famous “more than cigarettes” claim came from a machine run at 5.0 V, which real users reject as unsmokable — at a realistic 4.0 V it fell from 718 to 20 µg per 10 puffs. The honest replacement number is still only about a third below a 20-a-day smoker.",
       alsoIn: "thermal breakdown, worse the harder you run the coil"
     },
     {
       formula: "Ni",
+      stage: "heat",
       name: "Nickel",
       what: "Not in the liquid you bought — picked up on the way out. In 56 devices taken from daily users, median nickel was 68.4 µg/kg in the aerosol against 2.03 in the bottle.",
       alsoIn: "the heating coil, shedding into what you inhale"
     },
     {
       formula: "Pb · Cr · Mn",
+      stage: "heat",
       name: "Lead, chromium, manganese",
       what: "Same route as the nickel. Across those 56 devices, aerosol metals exceeded health-based limits in close to half the samples or more.",
       alsoIn: "coil, solder and plating"
     },
     {
       formula: "C₄H₆O₂",
+      stage: "bottle",
       name: "Diacetyl",
       what: "The butter-flavour chemical. Found in 39 of 51 flavours at up to 239 µg per device. Banned from UK and EU e-liquid since 2016 — not banned in the US, so where yours was made matters.",
       alsoIn: "sweet and buttery flavourings"
     },
     {
       formula: "C₁₀H₁₄N₂",
+      stage: "bottle",
       name: "Nicotine",
       what: "The reason the device is still in your pocket. Salt formulations let far more of it down without the harshness that used to stop people.",
       alsoIn: "the entire commercial point of the product"
     },
     {
-      formula: "NNAL",
-      name: "What is NOT in it",
-      what: "Measured in real people, exclusive vapers carried 98% less NNAL — a tobacco-specific carcinogen marker — than smokers. That gap is real and enormous. Vaping is not smoking.",
-      alsoIn: "the strongest argument in vaping's favour, stated plainly"
-    },
-    {
       formula: "n = 0",
+      stage: "absent",
       name: "And what nobody found",
       what: "There has never been a confirmed case of popcorn lung caused by vaping. Cancer Research UK says so flatly. If someone told you otherwise, they were repeating something the evidence does not support.",
       alsoIn: "the myth that discredits everyone who repeats it"
+    },
+    {
+      formula: "NNAL",
+      stage: "absent",
+      name: "What is NOT in it",
+      what: "Measured in real people, exclusive vapers carried 98% less NNAL — a tobacco-specific carcinogen marker — than smokers. That gap is real and enormous. Vaping is not smoking.",
+      alsoIn: "the strongest argument in vaping's favour, stated plainly"
     }
   ],
 

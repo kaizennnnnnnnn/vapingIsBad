@@ -138,6 +138,7 @@
   --alarm: #bb240b; /* 5.2:1 — the ink-band vermilion fails on paper */
   --jade: #156e51; /* 5.2:1 */
   --toxic: #6f7f00; /* 5.0:1 — the acid lime is unreadable on paper at full chroma */
+  --amber: #8f5600; /* 5.4:1 on bone-000 — the ink-band amber is 1.8:1 on paper */
   background: var(--bone-100);
   color: var(--tx-hi);
 }

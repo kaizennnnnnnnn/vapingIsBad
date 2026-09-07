@@ -5,8 +5,9 @@
    the vapour on the page behaves the same way: it is thick over the hero,
    churns through the sections about what is in it, and thins to almost
    nothing by the time you reach "what happens when you stop". Scrolling
-   drags it, the cursor pushes it, and it never covers the reading column
-   hard enough to hurt contrast.
+   drags it, the cursor pushes it, and it parts around the text: a feathered
+   hole is cleared beneath every band-level text block each frame, so the
+   contrast under a paragraph does not depend on where the smoke happens to be.
 
    No dependencies. Everything below degrades to a single static frame under
    prefers-reduced-motion, and to nothing at all if canvas is unavailable.
@@ -55,6 +56,28 @@
   let hasCursor = false;
   let t = 0;
   let raf = 0;
+
+  // Text that sits directly on a dark band, with nothing opaque between it
+  // and the canvas. Everything inside a slip, card or panel is excluded by
+  // construction because those carry their own background.
+  const CLEAR_SEL = [
+    ".hero .kicker", ".hero .lead", ".hero__meta",
+    ".band:not(.band--bone) .grid > .prose",
+    ".band:not(.band--bone) .grid > .col-note",
+    ".band:not(.band--bone) .shell > .fact__src",
+    ".band:not(.band--bone) .figure figcaption",
+    ".foot__note", ".foot__bar",
+  ].join(",");
+  let clearEls = [];
+  let clears = [];
+  // [outset px, alpha removed], innermost first. Product of (1 - alpha) over
+  // all nine is 0.130, i.e. 87% of the smoke gone directly under the text,
+  // tailing off across a 104px fringe.
+  const FEATHER = [
+    [0, "rgba(0,0,0,0.60)"], [6, "rgba(0,0,0,0.28)"], [14, "rgba(0,0,0,0.20)"],
+    [24, "rgba(0,0,0,0.16)"], [36, "rgba(0,0,0,0.13)"], [50, "rgba(0,0,0,0.10)"],
+    [66, "rgba(0,0,0,0.07)"], [84, "rgba(0,0,0,0.05)"], [104, "rgba(0,0,0,0.03)"],
+  ];
 
   const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
   const lerp = (a, b, k) => a + (b - a) * k;
@@ -267,7 +290,7 @@
       const fade =
         p.life < 0.16 ? p.life / 0.16 : p.life > 0.5 ? 1 - (p.life - 0.5) / 0.5 : 1;
 
-      const a = fade * 0.85 * d;
+      const a = fade * 0.5 * d;
       if (a <= 0.004) continue;
 
       const sprite = sprites[p.tint] || sprites[1];
@@ -291,9 +314,37 @@
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalAlpha = 1;
+
+    // Part the smoke around the type. Nested rects at a falling alpha ramp
+    // make a feathered hole — 86% cleared at the centre, 5% at a 66px
+    // fringe — for seven fillRects per block and no per-frame blur. Three
+    // coarse steps were tried first and read as a slab behind the paragraph.
+    if (delta !== 0 || !clears.length) measureClears();
+    ctx.globalCompositeOperation = "destination-out";
+    for (let i = 0; i < clears.length; i++) {
+      const r = clears[i];
+      if (r.bottom < -110 || r.top > H + 110) continue;
+      for (let k = FEATHER.length - 1; k >= 0; k--) {
+        const pad = FEATHER[k][0];
+        ctx.fillStyle = FEATHER[k][1];
+        ctx.fillRect(r.left - pad, r.top - pad, r.width + pad * 2, r.height + pad * 2);
+      }
+    }
     ctx.globalCompositeOperation = "source-over";
 
     if (!reduced) schedule();
+  }
+
+  function measureClears() {
+    if (!clearEls.length) clearEls = Array.prototype.slice.call(document.querySelectorAll(CLEAR_SEL));
+    const range = document.createRange();
+    clears = clearEls.map((el) => {
+      range.selectNodeContents(el);
+      const r = range.getBoundingClientRect();
+      // An empty or display:none block yields a zero rect; skip it rather
+      // than punching a hole at the origin.
+      return r.width && r.height ? r : null;
+    }).filter(Boolean);
   }
 
   function schedule() {
@@ -314,7 +365,8 @@
   // The field is anchored to a section offset, which moves whenever content
   // above it changes height — images loading, a myth opening, the quiz
   // advancing. Re-measuring on those is cheaper than measuring every frame.
-  window.addEventListener("load", measure);
+  window.addEventListener("load", () => { measure(); clearEls = []; measureClears(); });
+  window.addEventListener("resize", () => { clears = []; });
   if ("ResizeObserver" in window) {
     const ro = new ResizeObserver(() => measure());
     ro.observe(document.body);

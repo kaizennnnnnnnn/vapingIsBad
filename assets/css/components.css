@@ -305,12 +305,25 @@
     margin-top: 0;
   }
 
+  /* With only two slips, side-by-side columns end well above the lead and
+     leave a block of empty ground. Stacked, they fill the column. */
+  .facts__rest:not(:has(> :nth-child(3))) {
+    columns: 1;
+  }
+
   /* Scoped through .facts to outrank the `position: relative` on .fact, which
      is declared later in this file and would otherwise win on source order. */
   .facts .fact--lead {
+    margin: 0;
+  }
+}
+
+/* Pinned only when the viewport can actually hold the lead; on a short
+   window the pinned slip's last line would sit below the fold. */
+@media (min-width: 1080px) and (min-height: 720px) {
+  .facts .fact--lead {
     position: sticky;
     top: 96px;
-    margin: 0;
   }
 }
 
@@ -326,10 +339,17 @@
   background: var(--ink-100);
   /* Top rule only. Four borders would put the box straight back. */
   border-top: 5px solid var(--fact-tone, var(--ink-400));
-  transform: rotate(var(--fact-tilt, 0deg));
-  transition: transform var(--d-mid) var(--ease-out),
+  transform: translateY(18px) rotate(var(--fact-tilt, 0deg));
+  transition: transform var(--d-slow) var(--ease-out),
     box-shadow var(--d-mid) var(--ease-out),
     background var(--d-mid) var(--ease-out);
+}
+
+/* Without this the reveal helper's `[data-reveal].is-in { transform: none }`
+   wins on specificity and every slip snaps dead level the moment it fades in.
+   Same specificity, later in the cascade, so the tilt is what survives. */
+.fact.is-in {
+  transform: rotate(var(--fact-tilt, 0deg));
 }
 
 .band--bone .fact {
@@ -347,9 +367,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fact {
-    transform: none;
-  }
+  .fact,
+  .fact.is-in,
   .fact:hover {
     transform: none;
   }
@@ -437,6 +456,7 @@
   line-height: 1.6;
   color: var(--tx-mid);
   margin: 0;
+  max-width: 58ch;
 }
 
 .fact__src {
