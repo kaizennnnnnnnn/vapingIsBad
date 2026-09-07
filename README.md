@@ -10,26 +10,33 @@ An interactive, source-checked web presentation about what vaping actually does 
 
 | Section | What it does |
 |---|---|
-| The honest opening | Concedes the one true thing about "it's better than cigarettes", then explains why that's the wrong comparison for someone who never smoked |
-| What's in the aerosol | Interactive breakdown of the compounds in vape aerosol, with measured concentrations |
-| What nicotine does | How dependence forms, and why it forms faster on salt-nicotine devices |
-| The visible stuff | Skin, teeth, gums, sleep, breath, stamina — the near-term effects |
-| The anxiety loop | Why nicotine feels calming while measurably raising baseline anxiety |
-| **The money** | Live calculator: pick your habit, currency and price → daily / weekly / **monthly** / yearly / 5-year spend, what that buys instead, and what it compounds to if invested |
-| Myths, checked | Point-by-point corrections, including where the popular anti-vaping claims are themselves overstated |
-| What happens when you stop | Recovery timeline from 20 minutes to a year |
-| **The quiz** | Multiple-choice, instant sourced feedback, scored, retryable |
-| Sources | Every claim on the page, linked |
+| 01 · Ground rules | Opens by conceding the strongest evidence *for* vaping — 98% less NNAL than smoking, Cochrane high-certainty for smokers switching — then pivots on the line where the UK government tells never-smokers not to start |
+| 02 · Composition | Eight cards on what is actually in the aerosol, with measured concentrations. The last two are what *isn't* in it, and what nobody found |
+| 03 · Dependence | Why salt nicotine changed the product, and what the trial data says about quitting unaided |
+| 04 · Near term | Sleep, the anxiety loop, heart rate — plus one card on what has never been measured |
+| 05 · Lungs & heart | What's established, what isn't shown, and what's conclusive — three findings that disagree with each other |
+| **06 · The money** | Live calculator: habit, currency, price → daily / weekly / **monthly** / yearly / 5-year spend, what a year buys instead, nicotine load, and a compounding projection |
+| 07 · Myths | Eight claims checked. Several are ones the anti-vaping side gets wrong; one of those is first |
+| 08 · Afterwards | Recovery timeline built only from measured findings — ending with the fact that the famous "20 minutes" chart is cigarette research |
+| **09 · The quiz** | Twelve questions, instant sourced feedback, scored, retryable, keyboard-operable |
+| 10 · Resources | Verified quitlines and programmes for the US, UK, Australia and Canada |
+| 11 · Sources | All 24 sources, linked |
 
 ## How it was built
 
-Every factual claim went through a two-stage pipeline: a research pass against primary literature (PubMed, CDC, NHS, WHO, Cochrane, ASH, peer-reviewed journals), then an independent adversarial fact-check that re-fetched each cited source and re-stated, corrected, or removed the claim.
+Research ran as a fan-out across ten dimensions (respiratory, cardiovascular, dependence, toxicology, oral/dermatological, mental health, reproductive, device safety, epidemiology, economics), producing 194 candidate findings. Every claim that made it onto the page was then re-checked against its cited source — abstracts pulled through the NCBI eutils API, institutional pages read directly.
 
-Claims that couldn't be traced to a real, fetchable source were cut — including several widely-repeated ones. Where the evidence is correlational, animal-only, or extrapolated from cigarette research, the page says so. The goal was a page that survives a sceptical reader, not one that scores rhetorical points.
+That check changed things:
+
+- The metals claim was **overstated** in draft. The source says aerosol exceeded health-based limits in "close to 50% or more" of samples, not the specific 68/57/48% figures. Restated to match.
+- The recovery section originally opened on "within twenty minutes". That timeline is cigarette research — no vaping equivalent has been run. The page now says so explicitly as its closing item.
+- Precise figures that couldn't be traced to a fetchable source were dropped rather than published.
+
+Where evidence is correlational, animal-only, or borrowed from cigarette research, the copy says so in the copy — not in a footnote. Three of the eight myths are ones the *anti*-vaping side gets wrong, and popcorn lung is deliberately first: a page that only corrects one side isn't worth reading.
 
 ## Running it locally
 
-No build step, no dependencies, no framework. It's HTML, CSS and three small vanilla JS modules.
+No build step, no runtime dependencies, no framework. It is HTML, CSS and five small vanilla JS modules. Playwright is a dev dependency for the checks only.
 
 ```bash
 git clone https://github.com/kaizennnnnnnnn/vapingIsBad.git
@@ -45,7 +52,7 @@ Opening `index.html` directly from the filesystem works too.
 ```bash
 npm install && npx playwright install chromium
 
-npm run check     # 23 behaviour + a11y assertions (calculator, quiz, contrast, alt text)
+npm run check     # 29 behaviour + a11y assertions (calculator, quiz, keyboard, alt text)
 npm run shots     # screenshots at 375 / 768 / 1024 / 1440 into ./shots
 npm run og        # regenerate the social preview image
 ```
@@ -63,7 +70,8 @@ assets/css/tokens.css      design tokens — palette, type scale, spacing, motio
 assets/css/base.css        reset, typography, layout primitives
 assets/css/components.css  reusable parts — stats, facts, bars, disclosures
 assets/css/sections.css    hero, calculator, timeline, quiz
-assets/js/data.js          all content: facts, chemicals, myths, prices, quiz
+assets/js/data.js          all content: facts, chemicals, myths, prices, quiz, sources
+assets/js/render.js        turns the data layer into markup
 assets/js/calculator.js    cost + nicotine + compounding engine
 assets/js/quiz.js          quiz state machine
 assets/js/reveal.js        scroll progress, reveal-on-enter, disclosures
@@ -77,7 +85,9 @@ Content lives in `assets/js/data.js` — edit that to change facts, prices, or q
 
 ## Accessibility
 
-Semantic landmarks, keyboard-operable quiz (`1`–`4` to answer, `Enter` to advance), visible focus rings, `prefers-reduced-motion` honoured throughout, contrast checked against WCAG AA at all text sizes.
+Semantic landmarks, keyboard-operable quiz (`1`–`4` to answer, `Enter` to advance), skip link as the first tab stop, visible focus rings, `prefers-reduced-motion` honoured throughout, and 28px minimum hit areas on every control.
+
+Colour is the part most likely to rot, so it is pinned: all 36 text-token/surface combinations were solved against WCAG AA and each token in `tokens.css` carries its measured contrast ratio in a comment. Lowest ratio on the page is 4.59:1.
 
 ## A note on the point of this
 
@@ -85,7 +95,7 @@ This is a persuasion piece, and it says so. It is not medical advice and it is n
 
 ## Credits
 
-Image credits and full source citations are listed at the bottom of the page. All imagery is public domain or openly licensed, attributed in place.
+Imagery is public domain (US FDA; NIH BioArt by Ryan Kissinger / NIAID) and vendored into `assets/img/` rather than hotlinked, so the page has no third-party image dependency. Credits and all 24 source citations are listed at the bottom of the page.
 
 ## Licence
 
