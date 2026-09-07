@@ -135,9 +135,33 @@ ok("every myth opens", await page.evaluate(() => {
 }));
 ok("all images have alt text", await page.evaluate(() =>
   Array.from(document.images).every((i) => i.hasAttribute("alt"))));
+// Lazy images only fetch near the viewport, so walk the page first.
+await page.evaluate(async () => {
+  for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight * 0.8) {
+    window.scrollTo(0, y);
+    await new Promise((r) => setTimeout(r, 40));
+  }
+  window.scrollTo(0, 0);
+});
+await page.waitForTimeout(600);
 ok("all images actually loaded", await page.evaluate(() =>
   Array.from(document.images).every((i) => i.complete && i.naturalWidth > 0)),
   await page.evaluate(() => Array.from(document.images).filter(i => !i.naturalWidth).map(i => i.src).join(", ")));
+ok("the can't-tell-you list has four sourced items", await page.evaluate(() => {
+  const items = Array.from(document.querySelectorAll(".cant__item"));
+  return items.length === 4 && items.every((li) => li.querySelector(".fact__src a[href^='http']"));
+}));
+ok("sound is opt-in and the toggle reports its state", await page.evaluate(() => {
+  const b = document.querySelector("[data-dial-sound]");
+  const st = document.querySelector("[data-dial-sound-state]");
+  if (!b || b.getAttribute("aria-pressed") !== "false") return false;
+  b.click();
+  const on = b.getAttribute("aria-pressed") === "true" && st.textContent.trim() === "on";
+  document.querySelector("[data-dial-v='5']").click();
+  document.querySelector("[data-dial-v='4']").click();
+  b.click();
+  return on && b.getAttribute("aria-pressed") === "false";
+}));
 ok("single h1", (await page.locator("h1").count()) === 1);
 ok("page has a lang attribute",
   (await page.locator("html").getAttribute("lang")) !== null);
@@ -162,6 +186,16 @@ await kb.keyboard.press("Enter");
 await kb.waitForTimeout(200);
 ok("Enter advances the quiz", (await kb.locator(".opt").count()) >= 2);
 
+// The fire button works from the keyboard: Space held is a hold.
+await kb.evaluate(() => window.scrollTo(0, 0));
+await kb.locator("[data-hold]").focus();
+await kb.keyboard.down("Space");
+await kb.waitForTimeout(500);
+const kbHeld = await kb.evaluate(() => document.querySelector("[data-drag]").classList.contains("is-held"));
+await kb.keyboard.up("Space");
+const kbOut = await kb.evaluate(() => document.querySelector("[data-drag]").classList.contains("is-out"));
+ok("the fire button can be held from the keyboard", kbHeld && kbOut, `held=${kbHeld} out=${kbOut}`);
+
 ok("focus ring is visible", await kb.evaluate(() => {
   const el = document.querySelector(".btn");
   el.focus();
@@ -171,11 +205,110 @@ await kb.close();
 
 const rm = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
 await rm.goto(url, { waitUntil: "networkidle" });
+ok("no coil pulse under prefers-reduced-motion",
+  (await rm.evaluate(() =>
+    document.getAnimations().filter((a) => a.animationName === "coil-pulse").length)) === 0);
 ok("nothing stays hidden under prefers-reduced-motion",
   (await rm.evaluate(() =>
     Array.from(document.querySelectorAll("[data-reveal]"))
       .filter((e) => getComputedStyle(e).opacity === "0").length)) === 0);
 await rm.close();
+
+console.log("\nPHONE");
+const phCtx = await browser.newContext({ viewport: { width: 375, height: 740 }, hasTouch: true, isMobile: true });
+const ph = await phCtx.newPage();
+const phErrors = [];
+ph.on("pageerror", (e) => phErrors.push(e.message));
+ph.on("console", (m) => m.type() === "error" && phErrors.push(m.text()));
+await ph.goto(url, { waitUntil: "networkidle" });
+await ph.waitForTimeout(500);
+
+ok("the route stands vertical on a phone", await ph.evaluate(() => {
+  const st = Array.from(document.querySelectorAll(".station")).filter((s) => getComputedStyle(s).display !== "none");
+  const spine = document.querySelector(".route__spine");
+  return st.length === 3 && !!spine && getComputedStyle(spine).display === "none" &&
+    getComputedStyle(st[0].querySelector(".station__pin")).position === "sticky";
+}));
+
+ok("the phone coil exists and heats from the dial", await ph.evaluate(async () => {
+  const hi = document.querySelector("[data-dial-v='5']");
+  const coil = document.querySelector(".dial__coil");
+  const g = coil && coil.querySelector(".route__glow");
+  if (!hi || !g || getComputedStyle(coil).display === "none") return false;
+  const before = parseFloat(getComputedStyle(g).strokeWidth);
+  hi.click();
+  await new Promise((r) => setTimeout(r, 750));
+  const hot = document.querySelector(".route").classList.contains("is-hot");
+  const after = parseFloat(getComputedStyle(g).strokeWidth);
+  document.querySelector("[data-dial-v='4']").click();
+  return hot && after > before;
+}));
+
+await ph.evaluate(() => {
+  const l = document.querySelector(".lane--heat");
+  const r = l.getBoundingClientRect();
+  window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - window.innerHeight / 2, behavior: "instant" });
+});
+await ph.waitForTimeout(450);
+ok("the lane in view lights its station",
+  (await ph.evaluate(() => document.querySelector(".route").getAttribute("data-here"))) === "heat");
+
+// Touch-hold the fire button, then let go.
+await ph.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+await ph.waitForTimeout(200);
+const hb = await ph.locator("[data-hold]").boundingBox();
+const cdp = await phCtx.newCDPSession(ph);
+await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: hb.x + hb.width / 2, y: hb.y + hb.height / 2 }] });
+await ph.waitForTimeout(900);
+const held = await ph.evaluate(() => ({
+  on: document.querySelector("[data-drag]").classList.contains("is-held"),
+  k: parseFloat(getComputedStyle(document.querySelector("[data-hold]")).getPropertyValue("--hold")) || 0,
+  // Centre, not edge: the press scales the button down on purpose.
+  cx: (() => { const r = document.querySelector("[data-hold]").getBoundingClientRect(); return r.x + r.width / 2; })(),
+}));
+ok("the fire button stays put under the thumb", Math.abs(held.cx - (hb.x + hb.width / 2)) < 1,
+  `rest ${hb.x + hb.width / 2} held ${held.cx}`);
+await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+const released = await ph.evaluate(() => ({
+  out: document.querySelector("[data-drag]").classList.contains("is-out"),
+  cap: document.querySelector("[data-drag-cap]").textContent.trim(),
+}));
+ok("holding the fire button draws, letting go exhales",
+  held.on && held.k > 0.3 && released.out && released.cap === "Exhale",
+  JSON.stringify({ held, released }));
+
+// Stamps: stop at two sections, blow straight past a third.
+const park = async (id) => {
+  await ph.evaluate((id) => {
+    const h = document.querySelector("#" + id + " .shead");
+    const r = h.getBoundingClientRect();
+    window.scrollTo({ top: window.scrollY + r.top - window.innerHeight * 0.3, behavior: "instant" });
+  }, id);
+  await ph.waitForTimeout(950);
+};
+await park("honest");
+await park("inside");
+await ph.evaluate(() => {
+  const h = document.querySelector("#hook .shead");
+  const r = h.getBoundingClientRect();
+  window.scrollTo({ top: window.scrollY + r.top - window.innerHeight * 0.3, behavior: "instant" });
+  const q = document.querySelector("#quiz");
+  window.scrollTo({ top: q.getBoundingClientRect().top + window.scrollY - 64, behavior: "instant" });
+});
+await ph.waitForTimeout(950);
+const stamps = await ph.evaluate(() => ({
+  heads: document.querySelectorAll(".shead__no .stamp").length,
+  hook: !!document.querySelector("#hook .shead__no .stamp"),
+  slots: document.querySelectorAll(".card__slot").length,
+  stamped: document.querySelectorAll(".card__slot.is-stamped").length,
+  line: document.querySelector("[data-card-line]").innerHTML,
+}));
+ok("a section head stamps once you stop at it", stamps.heads >= 2 && stamps.stamped === stamps.heads, JSON.stringify(stamps));
+ok("scrolling straight past a section does not stamp it", !stamps.hook);
+ok("the card lists every section and links the ones not stamped",
+  stamps.slots === 11 && /Passed without stopping/.test(stamps.line) && /href="#hook"/.test(stamps.line) && !/href="#honest"/.test(stamps.line));
+ok("no console/page errors on the phone", phErrors.length === 0, phErrors.slice(0, 3).join(" | "));
+await phCtx.close();
 
 await browser.close();
 

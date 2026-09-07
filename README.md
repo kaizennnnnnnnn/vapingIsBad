@@ -11,16 +11,18 @@ An interactive, source-checked web presentation about what vaping actually does 
 | Section | What it does |
 |---|---|
 | 01 · Ground rules | Opens by conceding the strongest evidence *for* vaping — 98% less NNAL than smoking, Cochrane high-certainty for smokers switching — then pivots on the line where the UK government tells never-smokers not to start |
-| 02 · Composition | Eight cards on what is actually in the aerosol, with measured concentrations. The last two are what *isn't* in it, and what nobody found |
+| 02 · Composition | The aerosol as a route through the device: a tank → coil → mouthpiece schematic with eight chemicals in three lanes by where each one gets in. The third lane is what *isn't* in it. A two-position voltage dial re-runs the formaldehyde experiment and heats the drawn coil; sound is opt-in |
 | 03 · Dependence | Why salt nicotine changed the product, and what the trial data says about quitting unaided |
 | 04 · Near term | Sleep, the anxiety loop, heart rate — plus one card on what has never been measured |
 | 05 · Lungs & heart | What's established, what isn't shown, and what's conclusive — three findings that disagree with each other |
 | **06 · The money** | Live calculator: habit, currency, price → daily / weekly / **monthly** / yearly / 5-year spend, what a year buys instead, nicotine load, and a compounding projection |
 | 07 · Myths | Eight claims checked. Several are ones the anti-vaping side gets wrong; one of those is first |
 | 08 · Afterwards | Recovery timeline built only from measured findings — ending with the fact that the famous "20 minutes" chart is cigarette research |
+| Can't tell you | Four things the page as a whole cannot claim — thirty-year risk, her specific device, how quitting will go for her, and whether she should stop at all if she smoked first — each pinned to the source the confident version would have used |
 | **09 · The quiz** | Twelve questions, instant sourced feedback, scored, retryable, keyboard-operable |
 | 10 · Resources | Verified quitlines and programmes for the US, UK, Australia and Canada |
 | 11 · Sources | All 24 sources, linked |
+| Your card | A postmark lands on each section's index sticker when you stop there (not when you scroll past). The card at the foot collects them and links the sections you skipped. Nothing is stored |
 
 ## How it was built
 
@@ -52,14 +54,16 @@ Opening `index.html` directly from the filesystem works too.
 ```bash
 npm install && npx playwright install chromium
 
-npm run check     # 29 behaviour + a11y assertions (calculator, quiz, keyboard, alt text)
+npm run check     # 45 behaviour + a11y assertions (calculator, quiz, keyboard, phone route, stamps, alt text)
 npm run shots     # screenshots at 375 / 768 / 1024 / 1440 into ./shots
 npm run og        # regenerate the social preview image
 ```
 
 `npm run check` plays the whole quiz through, drives every calculator control,
 and fails on console errors, NaN output, missing alt text, broken images, or
-leftover placeholder copy. `npm run shots` additionally fails on horizontal
+leftover placeholder copy. A phone pass (375px, touch) checks that the route
+stands vertical, the dial heats the coil, a touch-hold on the fire button
+draws and exhales, and section heads only stamp after you stop at them. `npm run shots` additionally fails on horizontal
 overflow at any breakpoint.
 
 ## Structure
@@ -74,9 +78,10 @@ assets/js/data.js          all content: facts, chemicals, myths, prices, quiz, s
 assets/js/render.js        turns the data layer into markup
 assets/js/calculator.js    cost + nicotine + compounding engine
 assets/js/quiz.js          quiz state machine
-assets/js/vapour.js        the scroll-driven aerosol canvas
+assets/js/vapour.js        the scroll-driven aerosol canvas, the fire button, tilt
 assets/js/type.js          cursor-reactive display type + the cycling strike
-assets/js/play.js          myth guessing, the voltage dial, the timeline spine
+assets/js/play.js          myth guessing, the voltage dial (+ opt-in sound), lane-in-view, the timeline spine
+assets/js/stamps.js        postmarks on section heads, and the card that collects them
 assets/js/reveal.js        scroll progress, reveal-on-enter, disclosures
 assets/js/main.js          nav, share, anchors
 tools/shoot.mjs            screenshot + overflow harness

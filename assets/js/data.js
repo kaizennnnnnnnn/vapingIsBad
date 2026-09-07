@@ -378,10 +378,42 @@ window.VB = {
     {
       when: "An honest gap",
       what: "Nobody has run the famous chart for vaping",
-      note: "You have seen the \"20 minutes / 12 hours / 1 year\" recovery graphic. Every number on it comes from cigarette research. There is no equivalent timeline for someone who only ever vaped, because the studies have not been done. We would rather tell you that than hand you a graphic that isn't about you.",
+      note: "You have seen the \"20 minutes / 12 hours / 1 year\" recovery graphic. Every number on it comes from cigarette research — and so do the withdrawal and mood items above, which are smokers' figures. There is no equivalent timeline for someone who only ever vaped, because the studies have not been done. We would rather tell you that than hand you a graphic that isn't about you.",
       tone: "amber",
       source: "Stated as an evidence gap",
       sourceUrl: ""
+    }
+  ],
+
+  /* ---- What this page can't tell you -----------------------------------
+     The page's honesty has so far been local: a dashed lane for what is not
+     in the aerosol, an "honest gap" at the end of the timeline. These are the
+     four things the page as a whole cannot claim, each pinned to the same
+     source the confident version would have used. -------------------------- */
+  cant: [
+    {
+      lead: "What it does over thirty years.",
+      body: "Nobody knows. These products are about fifteen years old, and the longest any study on this page watches a vaper is one pregnancy. The cardiology statement that lists the acute effects says the long-term ones are unknown, and it means unknown in both directions.",
+      source: "American Heart Association scientific statement",
+      sourceUrl: "https://newsroom.heart.org/news/current-evidence-identifies-health-risks-of-e-cigarette-use-long-term-research-needed"
+    },
+    {
+      lead: "What is in the one in your pocket.",
+      body: "Every concentration here came from a specific device on a specific setting. The formaldehyde figure moved thirty-six-fold on one voltage change, and the metals came from 56 devices that disagreed with each other. Nobody has tested yours, and this page cannot tell you which of those devices it is closest to.",
+      source: "Farsalinos et al., PMID 28864295; Olmedo et al., PMID 29467105",
+      sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/28864295/"
+    },
+    {
+      lead: "How stopping will go for you.",
+      body: "The 51% figure comes from one trial of 261 people aged 16 to 25. The withdrawal timeline is borrowed from cigarette research. Both are the best available, and neither was run on someone like you specifically, so treat them as the shape of the curve rather than a forecast.",
+      source: "Evins et al., JAMA 2025, PMID 40266580",
+      sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/40266580/"
+    },
+    {
+      lead: "Whether you should stop at all.",
+      body: "If you smoked before you vaped, this is the wrong page. The evidence that switching completely cuts exposure is conclusive, and Cochrane rates it high certainty that vaping beats patches for quitting cigarettes. The argument above is written for someone who never smoked. If that is not you, the honest advice is different, and a stop-smoking service will give it.",
+      source: "NASEM 2018; Cochrane, PMID 41212103",
+      sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/41212103/"
     }
   ],
 

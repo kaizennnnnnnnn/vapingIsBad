@@ -106,8 +106,9 @@
 .hero__cta {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--sp-4);
-  margin-top: var(--sp-6);
+  margin: var(--sp-6) 0 var(--sp-4);
 }
 
 .hero__scroll {
@@ -1618,5 +1619,433 @@
   .route__glow,
   .route__coil {
     transition: none;
+  }
+}
+
+/* --- Route, stood on end -------------------------------------------------
+   Below 900px the horizontal schematic is gone. Instead of losing the
+   drawing, the route turns vertical: a narrow column on the left carries one
+   station per lane — tank, coil, mouthpiece — each pinned beside the lane it
+   belongs to while that lane scrolls past, joined by a tube that runs the
+   height of the block. The third station's tube is dashed, like its lane. */
+
+@media (max-width: 899.98px) {
+  .route__lanes {
+    grid-template-columns: 44px minmax(0, 1fr);
+    row-gap: 0;
+    column-gap: var(--sp-4);
+  }
+
+  .route__lanes > .lane {
+    grid-column: 2;
+    padding-bottom: var(--sp-7);
+  }
+
+  .route__lanes > .lane:last-child {
+    padding-bottom: 0;
+  }
+
+  .station {
+    position: relative;
+    grid-column: 1;
+    align-self: stretch;
+  }
+
+  .station::before {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--ink-500);
+  }
+
+  .station--absent::before {
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--tx-lo) 0 5px,
+      transparent 5px 11px
+    );
+    opacity: 0.7;
+  }
+
+  /* No background: an opaque box here rode along over the vapour as a hard
+     rectangle. The station bodies below hide the tube where the art is. */
+  .station__pin {
+    position: sticky;
+    top: 62px;
+    width: 44px;
+    padding-block: var(--sp-2);
+  }
+
+  .station__body {
+    fill: var(--ink-050);
+  }
+
+  .station__svg {
+    display: block;
+    width: 44px;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* The vertical coil is a fifth the length of the horizontal one. */
+  .station .route__coil {
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+  }
+
+  .station.is-in .route__coil {
+    stroke-dashoffset: 0;
+  }
+
+  .station .route__glow {
+    stroke-width: 10;
+    filter: url(#route-glow-m);
+  }
+
+  .station.is-in .route__glow {
+    opacity: 0.5;
+    animation: coil-pulse 2.8s var(--ease-in-out) 2.4s infinite;
+  }
+
+  .station .route__puff {
+    transform: translateY(-12px);
+  }
+
+  .station.is-in .route__puff {
+    opacity: 0.26;
+    transform: none;
+  }
+
+  .station.is-in .route__puff:nth-child(1) { transition-delay: 1500ms; }
+  .station.is-in .route__puff:nth-child(2) { transition-delay: 1640ms; }
+  .station.is-in .route__puff:nth-child(3) { transition-delay: 1800ms; }
+
+  .route.is-hot .station .route__glow {
+    stroke-width: 16;
+  }
+}
+
+@media (min-width: 900px) {
+  .station {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .station .route__puff {
+    transform: none;
+  }
+}
+
+/* --- The lane in view lights its station ---------------------------------
+   play.js marks the route with the lane currently in the middle of the
+   viewport. On a phone this is the only way the drawing and the list can
+   talk; on desktop it runs under the hover rules, so the schematic reacts
+   to scrolling as well as to the pointer. */
+
+.route[data-here="bottle"] .route__liquid {
+  opacity: 0.45;
+}
+
+.route[data-here="heat"] .route__glow {
+  opacity: 0.85;
+  animation: none;
+}
+
+.route[data-here="absent"] .route__puff {
+  opacity: 0.6;
+  fill: var(--tx-hi);
+}
+
+/* --- The dial's own coil --------------------------------------------------
+   When the schematic is not pinned above the dial — every phone, and any
+   short desktop window — the coil the dial heats has to be in the dial. */
+
+.dial__coil {
+  display: block;
+  width: min(220px, 100%);
+  height: auto;
+  margin-bottom: var(--sp-4);
+  overflow: visible;
+}
+
+.dial__coil .route__coil {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+}
+
+.dial.is-in .dial__coil .route__coil {
+  stroke-dashoffset: 0;
+}
+
+.dial__coil .route__glow {
+  stroke-width: 10;
+  filter: url(#dial-glow);
+}
+
+.dial.is-in .dial__coil .route__glow {
+  opacity: 0.5;
+  animation: coil-pulse 2.8s var(--ease-in-out) 2.4s infinite;
+}
+
+.route.is-hot .dial__coil .route__glow {
+  opacity: 0.95;
+  stroke-width: 16;
+  animation: none;
+}
+
+@media (min-width: 900px) and (min-height: 700px) {
+  .dial__coil {
+    display: none;
+  }
+}
+
+/* The pulse is an infinite opacity animation, which is exactly what a
+   reduced-motion reader opted out of. Lit, but still. */
+@media (prefers-reduced-motion: reduce) {
+  .station.is-in .route__glow,
+  .dial.is-in .dial__coil .route__glow {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* --- Sound, opt in ---------------------------------------------------------
+   A page should never make a noise unasked. The toggle is off until pressed,
+   and only the dial uses it. */
+
+.dial__sound {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  min-height: 44px;
+  padding: 0.55em 1em 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-lo);
+  border: 2px dashed var(--ink-400);
+  transition: color var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.dial__sound:hover {
+  color: var(--tx-hi);
+}
+
+.dial__soundDot {
+  width: 8px;
+  height: 8px;
+  background: var(--ink-500);
+  transform: rotate(45deg);
+  transition: background var(--d-fast) var(--ease-out);
+}
+
+.dial__sound[aria-pressed="true"] {
+  color: var(--toxic);
+  border-style: solid;
+  border-color: var(--toxic);
+}
+
+.dial__sound[aria-pressed="true"] .dial__soundDot {
+  background: var(--toxic);
+}
+
+/* --- Hold to take a drag ---------------------------------------------------
+   The fire button off a device. Held, it draws the vapour field in towards
+   the thumb; let go, and the page exhales. The ring is a hold-progress meter
+   driven by --hold from vapour.js. It sits in the CTA row, so on a phone it
+   lands beside the buttons whatever the viewport height; on a wide screen it
+   is lifted out to the right-hand edge of the hero copy. */
+
+.drag {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-left: var(--sp-2);
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 1100px) {
+  .drag {
+    /* Absolute against the shell's padding box, so the gutter has to be
+       re-applied to sit on the content edge. */
+    position: absolute;
+    right: var(--gutter);
+    bottom: 5.5rem;
+    margin: 0;
+  }
+}
+
+.drag__btn {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2px solid var(--tx-hi);
+  color: var(--tx-hi);
+  background: color-mix(in srgb, var(--ink-050) 72%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--d-fast) var(--ease-out),
+    background var(--d-fast) var(--ease-out),
+    border-color var(--d-fast) var(--ease-out);
+}
+
+.drag__btn:hover {
+  background: color-mix(in srgb, var(--tx-hi) 10%, transparent);
+}
+
+.drag.is-held .drag__btn {
+  transform: scale(0.94);
+  border-color: var(--alarm);
+  background: var(--alarm-wash);
+}
+
+.drag.is-out .drag__btn {
+  transform: scale(1.06);
+}
+
+.drag__ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: conic-gradient(var(--alarm) calc(var(--hold, 0) * 100%), transparent 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  pointer-events: none;
+}
+
+.drag__txt {
+  position: relative;
+}
+
+.drag__cap {
+  /* Wide enough for the longest label, so swapping the caption while the
+     thumb is down cannot move the button under it. */
+  display: block;
+  min-width: 96px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+  white-space: nowrap;
+}
+
+.drag.is-held .drag__cap,
+.drag.is-out .drag__cap {
+  color: var(--tx-mid);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drag {
+    display: none;
+  }
+}
+
+/* --- What this page can't tell you -----------------------------------------
+   Four items on a dashed frame: the "Not in it" lane, applied to the page.
+   A list, not a grid — four equal boxes would say the four are equal. */
+
+.cant__list {
+  list-style: none;
+  margin: var(--sp-6) 0 0;
+  padding: 0;
+  border-top: 2px dashed var(--ink-500);
+}
+
+.cant__item {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  gap: var(--sp-4);
+  padding: var(--sp-6) 0;
+  border-bottom: 2px dashed var(--ink-500);
+}
+
+.cant__n {
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 1.6rem + 2.4vw, 3.8rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--tx-lo);
+}
+
+.cant__body {
+  max-width: 62ch;
+}
+
+.cant__lead {
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-size: var(--t-h3);
+  line-height: 1;
+  letter-spacing: var(--tr-h3);
+  margin-bottom: var(--sp-3);
+}
+
+.cant__text {
+  font-size: var(--t-body);
+  line-height: 1.55;
+  color: var(--tx-mid);
+  margin: 0 0 var(--sp-3);
+}
+
+/* On the page's own twelve columns, so the body text lines up with the
+   intro paragraph above it rather than floating in the middle of the row. */
+@media (min-width: 900px) {
+  .cant__item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--sp-3);
+    align-items: start;
+  }
+
+  .cant__n {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cant__lead {
+    grid-column: 2 / span 5;
+    grid-row: 1;
+    margin: 0;
+    max-width: 12ch;
+  }
+
+  .cant__body {
+    display: contents;
+  }
+
+  .cant__text {
+    grid-column: 8 / -1;
+    grid-row: 1;
+  }
+
+  .cant__body > .fact__src {
+    grid-column: 8 / -1;
+    grid-row: 2;
   }
 }

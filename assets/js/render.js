@@ -119,6 +119,49 @@
     );
   }
 
+  /* Below 900px the horizontal spine has nowhere to go, so the route turns
+     vertical: one station per lane, pinned in a narrow column beside the lane
+     it belongs to, joined by a tube that runs down the whole block. The coil
+     is the same zigzag, stood on end. */
+  const STATIONS = {
+    bottle:
+      '<svg class="station__svg" viewBox="0 0 44 112" aria-hidden="true" focusable="false">' +
+      // Solid bodies sit behind each station so the tube is hidden only where
+      // the art is, and the vapour shows through everywhere else.
+      '<rect class="station__body" x="8" y="6" width="28" height="70" rx="4"/>' +
+      '<rect class="route__liquid" x="10" y="36" width="24" height="38"/>' +
+      '<rect class="route__ink" x="8" y="6" width="28" height="70" rx="4"/>' +
+      '<line class="route__ink" x1="22" y1="76" x2="22" y2="112"/>' +
+      "</svg>",
+    heat: (function () {
+      const coil =
+        "M22 18 L12 30 L32 42 L12 54 L32 66 L12 78 L32 90 L12 102 L32 114 L12 126 L22 132";
+      return (
+        '<svg class="station__svg" viewBox="0 0 44 150" aria-hidden="true" focusable="false">' +
+        '<defs><filter id="route-glow-m" x="-80%" y="-20%" width="260%" height="140%">' +
+        '<feGaussianBlur stdDeviation="5"/></filter></defs>' +
+        '<line class="route__ink" x1="22" y1="0" x2="22" y2="14"/>' +
+        '<rect class="station__body" x="6" y="14" width="32" height="122" rx="4"/>' +
+        '<rect class="route__ink" x="6" y="14" width="32" height="122" rx="4"/>' +
+        '<path class="route__glow" d="' + coil + '"/>' +
+        '<path class="route__coil" d="' + coil + '"/>' +
+        '<line class="route__ink" x1="22" y1="136" x2="22" y2="150"/>' +
+        "</svg>"
+      );
+    })(),
+    absent:
+      '<svg class="station__svg" viewBox="0 0 44 120" aria-hidden="true" focusable="false">' +
+      '<line class="route__ink" x1="22" y1="0" x2="22" y2="8"/>' +
+      '<path class="station__body" d="M10 8 L34 8 L30 40 L14 40 Z"/>' +
+      '<path class="route__ink" d="M10 8 L34 8 L30 40 L14 40 Z"/>' +
+      '<g class="route__puffs">' +
+      '<circle class="route__puff" cx="22" cy="56" r="6"/>' +
+      '<circle class="route__puff" cx="17" cy="74" r="9"/>' +
+      '<circle class="route__puff" cx="26" cy="96" r="12"/>' +
+      "</g>" +
+      "</svg>",
+  };
+
   function renderChems(sel, items) {
     const host = mount(sel);
     if (!host || !items) return;
@@ -144,6 +187,9 @@
         .map((st, n) => {
           const list = byStage[st.key] || [];
           return (
+            '<div class="station station--' + esc(st.key) + '" aria-hidden="true" data-reveal>' +
+            '<div class="station__pin">' + (STATIONS[st.key] || "") + "</div>" +
+            "</div>" +
             '<section class="lane lane--' + esc(st.key) + '" aria-labelledby="lane-' + esc(st.key) + '">' +
             '<header class="lane__head" data-reveal>' +
             '<span class="lane__no">Stage ' + (n + 1) + " / " + stages.length + "</span>" +
@@ -156,6 +202,25 @@
         })
         .join("") +
       "</div>";
+  }
+
+  /* --- What this page can't tell you -------------------------------------- */
+
+  function renderCant(sel, items) {
+    const host = mount(sel);
+    if (!host || !items) return;
+    host.innerHTML = items
+      .map(
+        (c, i) =>
+          '<li class="cant__item" data-reveal>' +
+          '<span class="cant__n" aria-hidden="true">' + String(i + 1).padStart(2, "0") + "</span>" +
+          '<div class="cant__body">' +
+          '<h3 class="cant__lead">' + rich(c.lead) + "</h3>" +
+          '<p class="cant__text">' + rich(c.body) + "</p>" +
+          '<span class="fact__src">' + srcLink(c.source, c.sourceUrl) + "</span>" +
+          "</div></li>"
+      )
+      .join("");
   }
 
   /* --- Myths -------------------------------------------------------------- */
@@ -275,6 +340,7 @@
   renderFacts("[data-r-facts-head]", D.headFacts);
   renderFacts("[data-r-facts-visible]", D.visibleFacts);
   renderChems("[data-r-chems]", D.chemicals);
+  renderCant("[data-r-cant]", D.cant);
   renderMyths("[data-r-myths]", D.myths);
   renderTimeline("[data-r-timeline]", D.recovery);
   renderBars("[data-r-bars-nicotine]", D.nicotineChart);

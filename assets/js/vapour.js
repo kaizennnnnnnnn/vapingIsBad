@@ -57,6 +57,17 @@
   let t = 0;
   let raf = 0;
 
+  // The fire button. While held the field is drawn in towards the point of
+  // contact and thickens; on release it is thrown back out. `flood` is the
+  // extra density either way, and decays on its own.
+  const drag = { active: false, x: 0, y: 0, t0: 0, k: 0 };
+  let flood = 0;
+  const HOLD_MS = 1800;
+
+  // Tilt on a phone becomes wind. Smoothed so a shaky hand is weather, not
+  // a strobe.
+  let tiltX = 0, tiltY = 0, windX = 0, windY = 0;
+
   // Text that sits directly on a dark band, with nothing opaque between it
   // and the canvas. Everything inside a slip, card or panel is excluded by
   // construction because those carry their own background.
@@ -223,6 +234,34 @@
     schedule();
   }
 
+  // Exhale: the oldest particles are thrown out from the point of release,
+  // faster and larger the longer the hold was.
+  function exhale(x, y, k) {
+    const n = Math.round(10 + 34 * k);
+    const order = particles
+      .map((p, i) => [p.life, i])
+      .sort((a, b) => b[0] - a[0])
+      .slice(0, n);
+    const tint = tintNow();
+    for (let j = 0; j < order.length; j++) {
+      const p = particles[order[j][1]];
+      const ang = Math.random() * Math.PI * 2;
+      const sp = (1.1 + Math.random() * 2.6) * (0.55 + k);
+      spawn(p, false);
+      p.x = x + (Math.random() - 0.5) * 40;
+      p.y = y + (Math.random() - 0.5) * 40;
+      p.vx = Math.cos(ang) * sp;
+      p.vy = Math.sin(ang) * sp - 0.7;
+      p.scale = 0.5 + Math.random() * 0.6 + 0.9 * k;
+      p.grow = 0.0050 + Math.random() * 0.0045;
+      p.decay = 0.0032 + Math.random() * 0.0030;
+      p.life = 0;
+      p.tint = tint;
+    }
+    flood = Math.max(flood, 0.6 + 0.6 * k);
+    schedule();
+  }
+
   /* --- Frame -------------------------------------------------------------- */
 
   function draw() {
@@ -241,6 +280,20 @@
     const s = stage();
     // Tint index: alarm-lit early, neutral through the middle, jade at the end.
     const tint = s < 0.3 ? 0 : s < 0.72 ? 1 : 2;
+
+    if (drag.active) {
+      drag.k = clamp((performance.now() - drag.t0) / HOLD_MS, 0, 1);
+      flood = lerp(flood, 0.45 + 0.55 * drag.k, 0.05);
+      if (holdEl) holdEl.style.setProperty("--hold", drag.k.toFixed(3));
+    } else if (flood > 0.002) {
+      flood *= 0.972;
+    } else {
+      flood = 0;
+    }
+
+    windX = lerp(windX, tiltX * 0.012, 0.04);
+    windY = lerp(windY, tiltY * 0.0015, 0.04);
+    const pullR = Math.min(W, H) * 0.75;
 
     ctx.clearRect(0, 0, W, H);
     ctx.globalCompositeOperation = "lighter";
@@ -276,6 +329,22 @@
         }
       }
 
+      // Inhale: everything within reach leans towards the thumb, harder the
+      // longer it is held, and tightens as it goes.
+      if (drag.active) {
+        const dx = drag.x - p.x, dy = drag.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        if (dist < pullR) {
+          const f = (1 - dist / pullR) * (0.10 + 0.42 * drag.k);
+          p.vx += (dx / dist) * f;
+          p.vy += (dy / dist) * f;
+          if (p.scale > 0.55) p.scale -= 0.0035 * drag.k;
+        }
+      }
+
+      p.vx += windX;
+      p.vy += windY;
+
       p.x += p.vx + shear * 0.012;
       p.y += p.vy - shear * PARALLAX * 0.5;
       p.scale += p.grow;
@@ -290,7 +359,7 @@
       const fade =
         p.life < 0.16 ? p.life / 0.16 : p.life > 0.5 ? 1 - (p.life - 0.5) / 0.5 : 1;
 
-      const a = fade * 0.5 * d;
+      const a = Math.min(fade * 0.5 * d * (1 + flood * 0.9), 0.95);
       if (a <= 0.004) continue;
 
       const sprite = sprites[p.tint] || sprites[1];
@@ -394,9 +463,126 @@
 
   window.addEventListener(
     "pointerdown",
-    (e) => puff(e.clientX, e.clientY, 9),
+    (e) => {
+      // The fire button has its own choreography.
+      if (e.target && e.target.closest && e.target.closest("[data-hold]")) return;
+      puff(e.clientX, e.clientY, 9);
+    },
     { passive: true }
   );
+
+  /* --- The fire button ----------------------------------------------------- */
+
+  const holdEl = document.querySelector("[data-hold]");
+  const dragEl = holdEl ? holdEl.closest("[data-drag]") : null;
+  const capEl = dragEl ? dragEl.querySelector("[data-drag-cap]") : null;
+  let capTimer = 0;
+  let firstRelease = true;
+
+  function holdStart(x, y) {
+    if (drag.active) return;
+    drag.active = true;
+    drag.x = x;
+    drag.y = y;
+    drag.t0 = performance.now();
+    drag.k = 0;
+    if (dragEl) {
+      dragEl.classList.add("is-held");
+      dragEl.classList.remove("is-out");
+    }
+    if (capEl) capEl.textContent = "Drawing";
+    clearTimeout(capTimer);
+    schedule();
+  }
+
+  function holdEnd() {
+    if (!drag.active) return;
+    drag.active = false;
+    const k = drag.k;
+    exhale(drag.x, drag.y, k);
+    if (holdEl) holdEl.style.setProperty("--hold", "0");
+    if (dragEl) {
+      dragEl.classList.remove("is-held");
+      dragEl.classList.add("is-out");
+    }
+    if (capEl) capEl.textContent = "Exhale";
+    clearTimeout(capTimer);
+    capTimer = setTimeout(() => {
+      if (dragEl) dragEl.classList.remove("is-out");
+      if (capEl) capEl.textContent = "Take a drag";
+    }, 1400);
+    // iOS only hands out motion data after a gesture. Ask once, after the
+    // first drag is complete, so the prompt never swallows the hold itself.
+    if (firstRelease) {
+      firstRelease = false;
+      askForTilt();
+    }
+  }
+
+  if (holdEl) {
+    holdEl.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      try { holdEl.setPointerCapture(e.pointerId); } catch (err) { /* not required */ }
+      holdStart(e.clientX, e.clientY);
+    });
+    holdEl.addEventListener("pointermove", (e) => {
+      if (!drag.active) return;
+      drag.x = e.clientX;
+      drag.y = e.clientY;
+    });
+    ["pointerup", "pointercancel", "lostpointercapture"].forEach((ev) =>
+      holdEl.addEventListener(ev, holdEnd)
+    );
+    holdEl.addEventListener("contextmenu", (e) => e.preventDefault());
+    holdEl.addEventListener("keydown", (e) => {
+      if (e.repeat || (e.key !== " " && e.key !== "Enter")) return;
+      e.preventDefault();
+      const r = holdEl.getBoundingClientRect();
+      holdStart(r.left + r.width / 2, r.top + r.height / 2);
+    });
+    holdEl.addEventListener("keyup", (e) => {
+      if (e.key === " " || e.key === "Enter") holdEnd();
+    });
+    holdEl.addEventListener("blur", holdEnd);
+  }
+
+  /* --- Tilt ------------------------------------------------------------------
+     Only on a phone. Android hands the sensor over on request; iOS wants a
+     permission call from inside a gesture, which the fire button provides. */
+
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  let tiltWired = false;
+
+  function onTilt(e) {
+    if (e.gamma == null || e.beta == null) return;
+    let g = e.gamma, b = e.beta;
+    const o = window.screen && window.screen.orientation;
+    if (o && /landscape/.test(o.type || "")) { const tmp = g; g = b; b = tmp; }
+    tiltX = clamp(g / 40, -1, 1);
+    // Upright-in-hand is about 55 degrees from flat; measure from there.
+    tiltY = clamp((b - 55) / 35, -1, 1);
+  }
+
+  function wireTilt() {
+    if (tiltWired) return;
+    tiltWired = true;
+    window.addEventListener("deviceorientation", onTilt, { passive: true });
+  }
+
+  function askForTilt() {
+    if (!coarse || tiltWired || !("DeviceOrientationEvent" in window)) return;
+    const DOE = window.DeviceOrientationEvent;
+    if (typeof DOE.requestPermission !== "function") return;
+    DOE.requestPermission()
+      .then((state) => { if (state === "granted") wireTilt(); })
+      .catch(() => { /* declined; the field just drifts on its own */ });
+  }
+
+  if (coarse && "DeviceOrientationEvent" in window &&
+      typeof window.DeviceOrientationEvent.requestPermission !== "function") {
+    wireTilt();
+  }
 
   // One exhale on arrival, from low and left of the headline.
   window.setTimeout(() => puff(W * 0.22, H * 0.86, 14), 620);

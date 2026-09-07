@@ -58,6 +58,14 @@
     <div class="hero__cta">
       <a class="btn btn--solid" href="#money">See what it&rsquo;s costing you <span class="btn__arrow" aria-hidden="true">&rarr;</span></a>
       <a class="btn" href="#quiz">Skip to the quiz</a>
+      <div class="drag" data-drag>
+        <button class="drag__btn" type="button" data-hold aria-label="Hold to take a drag" aria-describedby="drag-help">
+          <span class="drag__ring" aria-hidden="true"></span>
+          <span class="drag__txt" aria-hidden="true">Hold</span>
+        </button>
+        <span class="drag__cap" data-drag-cap aria-hidden="true">Take a drag</span>
+        <span class="sr-only" id="drag-help">Visual effect only: while held, it draws the vapour on the page towards the button, and lets it go when released.</span>
+      </div>
     </div>
     <div class="hero__meta">
       <span>24 sources, all linked</span>
@@ -181,6 +189,10 @@
           <button type="button" data-dial-v="4" aria-pressed="true">4.0 V &mdash; real use</button>
           <button type="button" data-dial-v="5" aria-pressed="false">5.0 V &mdash; the machine</button>
         </div>
+        <button class="dial__sound" type="button" data-dial-sound aria-pressed="false">
+          <span class="dial__soundDot" aria-hidden="true"></span>
+          Sound <span data-dial-sound-state aria-hidden="true">off</span>
+        </button>
         <p class="dial__src">
           Both readings come from the same replication, and neither is invented.
           The only thing that changed is the setting. &mdash;
@@ -188,6 +200,13 @@
         </p>
       </div>
       <div class="dial__out">
+        <svg class="dial__coil" viewBox="0 0 220 40" aria-hidden="true" focusable="false">
+          <defs><filter id="dial-glow" x="-10%" y="-100%" width="120%" height="300%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+          <line class="route__ink" x1="0" y1="20" x2="20" y2="20"/>
+          <path class="route__glow" d="M20 20 L30 6 L46 34 L62 6 L78 34 L94 6 L110 34 L126 6 L142 34 L158 6 L174 34 L190 6 L200 20"/>
+          <path class="route__coil" d="M20 20 L30 6 L46 34 L62 6 L78 34 L94 6 L110 34 L126 6 L142 34 L158 6 L174 34 L190 6 L200 20"/>
+          <line class="route__ink" x1="200" y1="20" x2="220" y2="20"/>
+        </svg>
         <span class="dial__n" data-dial-n>20</span>
         <span class="dial__unit"><span class="dial__u">&micro;g</span> formaldehyde per 10 puffs</span>
         <div class="dial__bar"><div class="dial__fill" data-dial-bar></div></div>
@@ -550,11 +569,29 @@
       <div class="col-side prose" data-reveal>
         <p>
           Shorter and less dramatic than the graphics you have seen &mdash;
-          because this one only contains things that were measured.
+          because this one only contains things that were measured, and says
+          which of them were measured in smokers.
         </p>
       </div>
     </div>
     <ol class="timeline" data-r-timeline></ol>
+  </div>
+</section>
+
+<!-- ═══ WHAT THIS PAGE CAN'T TELL YOU ══════════════════════════════════ -->
+<section class="band band--tight cant" id="cant" aria-labelledby="cant-title">
+  <div class="shell grid">
+    <div class="col-head" data-reveal>
+      <p class="kicker">The dashed lane, page-wide</p>
+      <h2 class="display display--h2" id="cant-title">Four things this page <em>can&rsquo;t tell you</em>.</h2>
+    </div>
+    <div class="col-side prose" data-reveal>
+      <p>
+        Everything above was checked against a source. These are the questions
+        no source settles, so the page does not pretend to.
+      </p>
+    </div>
+    <ol class="cant__list col-full" data-r-cant></ol>
   </div>
 </section>
 
@@ -629,6 +666,26 @@
   </div>
 </section>
 
+<!-- ═══ YOUR CARD ══════════════════════════════════════════════════════ -->
+<section class="band band--bone band--tight" id="card" aria-labelledby="card-title">
+  <div class="shell">
+    <div class="grid" style="margin-bottom:var(--sp-7)">
+      <div class="col-head" data-reveal>
+        <p class="kicker">Your card</p>
+        <h2 class="display display--h2" id="card-title">Stamped <em>on the way through</em>.</h2>
+      </div>
+      <div class="col-side prose" data-reveal>
+        <p>
+          Every section you stopped at got a postmark when you arrived. Nothing
+          is saved anywhere; the card lasts as long as the tab does.
+        </p>
+      </div>
+    </div>
+    <ol class="card" data-card aria-label="Sections, and which ones you stopped at"></ol>
+    <p class="card__line" data-card-line></p>
+  </div>
+</section>
+
 </main>
 
 <footer class="foot">
@@ -656,6 +713,7 @@
 <script src="assets/js/vapour.js"></script>
 <script src="assets/js/type.js"></script>
 <script src="assets/js/play.js"></script>
+<script src="assets/js/stamps.js"></script>
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
