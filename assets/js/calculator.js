@@ -247,7 +247,8 @@
     const c = cur();
     const preset = m.price[state.currency] != null ? m.price[state.currency] : m.price[D.defaultCurrency];
     state.price = preset;
-    state.units = m.defaultUnits;
+    state.units =
+      (m.defaultUnitsBy && m.defaultUnitsBy[state.currency]) || m.defaultUnits;
     if (el.price) el.price.value = preset;
 
     const mlPreset = m.ml[state.currency] != null ? m.ml[state.currency] : m.ml[D.defaultCurrency];

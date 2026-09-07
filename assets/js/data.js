@@ -46,6 +46,11 @@ window.VB = {
         priceQuestion: "Price each",
         mlQuestion: "Liquid per device",
         min: 1, max: 21, step: 1, defaultUnits: 3,
+        // Device size varies enormously by market — a UK disposable is capped at
+        // 2 mL, a US one averages well over ten. Three a week is a sensible
+        // starting point in a 2 mL market and absurd in a 12 mL one, so the
+        // opening guess is set per market. Everything stays editable.
+        defaultUnitsBy: { USD: 1, CAD: 1, PHP: 1, INR: 1, ZAR: 1, SGD: 1, MYR: 1 },
         price: { GBP: 5.5, USD: 14, EUR: 7, CAD: 18, AUD: 25, NZD: 28, PLN: 30, PHP: 350, INR: 700, ZAR: 180, SGD: 18, MYR: 40 },
         ml: { GBP: 2, USD: 12, EUR: 2, CAD: 10, AUD: 2, NZD: 2, PLN: 2, PHP: 10, INR: 10, ZAR: 10, SGD: 10, MYR: 10 }
       },
