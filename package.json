@@ -1,0 +1,25 @@
+{
+  "name": "vaping-is-bad",
+  "version": "1.0.0",
+  "description": "An interactive, source-checked web presentation on vaping — with a live cost calculator and a quiz.",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "shots": "node tools/shoot.mjs --full",
+    "og": "node tools/og.mjs",
+    "serve": "npx --yes serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaizennnnnnnnn/vapingIsBad.git"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kaizennnnnnnnn/vapingIsBad/issues"
+  },
+  "homepage": "https://github.com/kaizennnnnnnnn/vapingIsBad#readme",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  },
+  "private": true
+}
