@@ -40,7 +40,7 @@
     nic: {
       mg: $("[data-c-nic-mg]"),
       ml: $("[data-c-nic-ml]"),
-      cigs: $("[data-c-nic-cigs]"),
+      grams: $("[data-c-nic-grams]"),
       note: $("[data-c-nic-note]"),
     },
     chart: $("[data-c-chart]"),
@@ -91,9 +91,11 @@
     // real-world use is an order of magnitude below them.
     const mlPerDay = (state.units * state.ml) / 7;
     const nicMgPerDay = mlPerDay * state.strength;
-    const cigEq = nicMgPerDay / D.nicotineMgPerCigaretteEquivalent;
+    // Grams a year rather than a "cigarettes' worth" comparison: it needs no
+    // contested constant, and it comes entirely from her own inputs.
+    const nicGramsPerYear = (nicMgPerDay * 365) / 1000;
 
-    return { daily, weekly, monthly, yearly, mlPerDay, nicMgPerDay, cigEq };
+    return { daily, weekly, monthly, yearly, mlPerDay, nicMgPerDay, nicGramsPerYear };
   }
 
   /* --- compounding -------------------------------------------------------- */
@@ -196,7 +198,7 @@
 
     if (el.nic.mg) el.nic.mg.textContent = r.nicMgPerDay.toFixed(r.nicMgPerDay < 10 ? 1 : 0);
     if (el.nic.ml) el.nic.ml.textContent = r.mlPerDay.toFixed(r.mlPerDay < 10 ? 1 : 0);
-    if (el.nic.cigs) el.nic.cigs.textContent = r.cigEq.toFixed(r.cigEq < 10 ? 1 : 0);
+    if (el.nic.grams) el.nic.grams.textContent = r.nicGramsPerYear.toFixed(r.nicGramsPerYear < 10 ? 1 : 0);
     if (el.nic.note) el.nic.note.textContent = D.nicotineNote || "";
 
     if (el.mlLabel) el.mlLabel.textContent = m.mlQuestion;

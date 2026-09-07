@@ -584,3 +584,49 @@
   color: var(--alarm);
   margin-right: 0.6em;
 }
+
+/* --- Pull quote ---------------------------------------------------------- */
+
+.pull {
+  margin: var(--sp-6) 0;
+  padding: var(--sp-5) 0 var(--sp-5) var(--sp-5);
+  border-left: 2px solid var(--alarm);
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+  color: var(--tx-hi);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.pull strong {
+  font-weight: 400;
+  color: var(--alarm);
+}
+
+.pull cite {
+  display: block;
+  margin-top: var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  color: var(--tx-lo);
+  text-transform: none;
+}
+
+/* Illustrations that are line art on transparency, not photographs — they
+   want breathing room and no grayscale/zoom treatment. */
+.img--plate {
+  object-fit: contain !important;
+  padding: 9%;
+  filter: none !important;
+  opacity: 0.78;
+}
+
+.figure:hover .img--plate {
+  transform: none;
+  opacity: 1;
+}

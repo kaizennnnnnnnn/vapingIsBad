@@ -16,11 +16,15 @@
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
     }[c]));
 
-  // Allows a small amount of inline emphasis in authored copy.
+  // Authored copy may use **bold**, *italic*, or literal <strong>/<em>.
+  // Everything is escaped first, then that narrow whitelist is restored —
+  // the content in data.js is authored, but escaping by default keeps this
+  // safe if it ever renders anything that isn't.
   const rich = (s) =>
     esc(s)
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/&lt;(\/?)(strong|em|b|i)&gt;/g, "<$1$2>");
 
   const mount = (sel) => document.querySelector(sel);
 
@@ -62,7 +66,7 @@
           '<span class="chem__formula">' + esc(c.formula) + "</span>" +
           '<h3 class="chem__name">' + esc(c.name) + "</h3>" +
           '<p class="chem__what">' + rich(c.what) + "</p>" +
-          '<p class="chem__also">Also found in <b>' + esc(c.alsoIn) + "</b></p>" +
+          '<p class="chem__also"><b>' + esc(c.alsoIn) + "</b></p>" +
           "</div>"
       )
       .join("");
