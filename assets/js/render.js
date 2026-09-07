@@ -35,23 +35,47 @@
 
   /* --- Facts grid --------------------------------------------------------- */
 
+  // Certainty drives the slip's top rule, so how well a claim is evidenced is
+  // carried by the layout rather than by a badge you have to stop and read.
+  const TONE = { high: "var(--jade)", medium: "var(--amber)", low: "var(--tx-lo)" };
+
+  // A small, irregular set of tilts. Cycling through primes-ish offsets keeps
+  // adjacent slips from ever landing on the same angle.
+  const TILT = [-0.8, 0.55, -0.45, 0.9, -0.6, 0.4, -0.35, 0.7];
+
+  function slip(f, i, lead) {
+    const tone = TONE[f.evidence] || "var(--ink-400)";
+    const tilt = lead ? 0 : TILT[i % TILT.length];
+    return (
+      '<article class="fact' + (lead ? " fact--lead" : "") + '"' +
+      ' style="--fact-tone:' + tone + ";--fact-tilt:" + tilt + 'deg"' +
+      " data-reveal>" +
+      '<span class="fact__idx">' + String(i + 1).padStart(2, "0") + "</span>" +
+      '<h3 class="fact__title">' + rich(f.title) + "</h3>" +
+      '<div class="fact__side">' +
+      '<p class="fact__body">' + rich(f.body) + "</p>" +
+      (f.evidence
+        ? '<span class="tag tag--' + esc(f.evidence) + '">' + esc(f.evidence) + " certainty</span>"
+        : "") +
+      '<span class="fact__src">' + srcLink(f.source, f.sourceUrl) + "</span>" +
+      "</div></article>"
+    );
+  }
+
+  /* A grid of equal boxes gives every claim the same weight and reads as a
+     template. The first item is promoted to a full-width lead instead, and the
+     rest flow down uneven columns so their natural lengths set the rhythm. */
   function renderFacts(sel, items) {
     const host = mount(sel);
-    if (!host || !items) return;
-    host.innerHTML = items
-      .map(
-        (f, i) =>
-          '<article class="fact" data-reveal>' +
-          '<span class="fact__idx">' + String(i + 1).padStart(2, "0") + "</span>" +
-          '<h3 class="fact__title">' + rich(f.title) + "</h3>" +
-          '<p class="fact__body">' + rich(f.body) + "</p>" +
-          (f.evidence
-            ? '<span class="tag tag--' + esc(f.evidence) + '">' + esc(f.evidence) + " certainty</span>"
-            : "") +
-          '<span class="fact__src">' + srcLink(f.source, f.sourceUrl) + "</span>" +
-          "</article>"
-      )
-      .join("");
+    if (!host || !items || !items.length) return;
+    const rest = items.slice(1);
+    host.innerHTML =
+      slip(items[0], 0, true) +
+      (rest.length
+        ? '<div class="facts__rest">' +
+          rest.map((f, i) => slip(f, i + 1, false)).join("") +
+          "</div>"
+        : "");
   }
 
   /* --- Chemicals ---------------------------------------------------------- */
