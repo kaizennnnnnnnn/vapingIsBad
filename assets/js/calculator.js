@@ -43,6 +43,9 @@
       grams: $("[data-c-nic-grams]"),
       note: $("[data-c-nic-note]"),
     },
+    since: $("[data-c-since]"),
+    sinceOut: $("[data-c-since-out]"),
+    sinceNote: $("[data-c-since-note]"),
     chart: $("[data-c-chart]"),
     chartNote: $("[data-c-chart-note]"),
     horizon: $("[data-c-horizon]"),
@@ -224,6 +227,8 @@
         .join("");
     }
 
+    renderSince(r);
+
     const series = projection(r.monthly, state.horizon, D.investmentReturn);
     drawChart(series);
 
@@ -237,6 +242,47 @@
             fmt(last.invested - last.spent, 0) + " is growth you got for free. Spent on vapes, it is " +
             fmt(last.spent, 0) + " gone."
           : "";
+    }
+  }
+
+  /* --- "if you'd stopped on..." --------------------------------------------
+     The forward projection is abstract; a date already behind you is not.
+     Same daily rate, counted backwards from a day the reader picks. */
+
+  function renderSince(r) {
+    if (!el.sinceOut || !el.since || !el.since.value) return;
+
+    // Parse as local midnight. new Date("2026-01-01") is parsed as UTC, which
+    // lands on the previous day for anyone west of Greenwich.
+    const parts = el.since.value.split("-");
+    const then = new Date(
+      parseInt(parts[0], 10),
+      parseInt(parts[1], 10) - 1,
+      parseInt(parts[2], 10)
+    );
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((today - then) / 86400000);
+
+    if (isNaN(days) || days < 0) {
+      el.sinceOut.textContent = "—";
+      if (el.sinceNote) el.sinceNote.textContent = "Pick a date that has already happened.";
+      return;
+    }
+    if (days === 0) {
+      el.sinceOut.textContent = fmt(0, 0);
+      if (el.sinceNote) el.sinceNote.textContent = "Starting today, the counter starts at nothing. Come back tomorrow.";
+      return;
+    }
+
+    el.sinceOut.textContent = fmt(r.daily * days, r.daily * days < 100 ? 2 : 0);
+    if (el.sinceNote) {
+      el.sinceNote.textContent =
+        days +
+        (days === 1 ? " day" : " days") +
+        " at " +
+        fmt(r.daily, 2) +
+        " a day. The money is the easy part to get back — it is also the only part that starts working immediately.";
     }
   }
 
@@ -285,6 +331,18 @@
       render();
     });
   });
+
+  if (el.since) {
+    const now = new Date();
+    el.since.value = now.getFullYear() + "-01-01";
+    el.since.max =
+      now.getFullYear() +
+      "-" +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(now.getDate()).padStart(2, "0");
+    el.since.addEventListener("input", render);
+  }
 
   if (el.unitRange) {
     el.unitRange.addEventListener("input", () => {

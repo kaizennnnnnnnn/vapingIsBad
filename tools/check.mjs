@@ -98,6 +98,35 @@ ok("no unresolved em-dash slots",
   !(await page.evaluate(() =>
     Array.from(document.querySelectorAll("[data-s1-body],[data-s2-body],[data-s3-body],[data-s4-body],[data-s5-body],[data-s6-body],[data-s7-body],[data-s8-body],[data-s9-body],[data-s10-body]"))
       .some((el) => el.innerText.trim() === "—"))));
+// text-transform: uppercase turns the micro sign into a capital Mu, which
+// reads as "M" — so a microgram silently becomes a milligram on screen.
+ok("no micro sign inside an uppercased element", await page.evaluate(() => {
+  return !Array.from(document.querySelectorAll("*")).some((el) => {
+    if (getComputedStyle(el).textTransform !== "uppercase") return false;
+    return Array.from(el.childNodes).some(
+      (n) => n.nodeType === 3 && n.nodeValue.indexOf("µ") !== -1
+    );
+  });
+}));
+ok("guessing a myth reveals its verdict", await page.evaluate(() => {
+  const d = document.querySelector("[data-disclosure]");
+  if (!d) return false;
+  const btn = d.querySelector(".guess [data-g='f']");
+  if (!btn) return false;
+  btn.click();
+  const r = d.querySelector(".disclosure__reality");
+  return !!r && !r.hidden;
+}));
+ok("the voltage dial swaps both readings", await page.evaluate(() => {
+  const lo = document.querySelector("[data-dial-v='4']");
+  const hi = document.querySelector("[data-dial-v='5']");
+  const n = document.querySelector("[data-dial-n]");
+  if (!lo || !hi || !n) return false;
+  hi.click();
+  const after = hi.getAttribute("aria-pressed") === "true";
+  lo.click();
+  return after && lo.getAttribute("aria-pressed") === "true";
+}));
 ok("every myth opens", await page.evaluate(() => {
   const d = document.querySelectorAll("[data-disclosure]");
   if (!d.length) return false;

@@ -38,7 +38,10 @@
   margin-bottom: var(--sp-6);
 }
 
-.hero__title span {
+/* Direct children only. type.js splits the headline into one span per glyph,
+   and a descendant selector here turned every character into its own block —
+   a 4,920px-tall headline, one letter per line. */
+.hero__title > span {
   display: block;
 }
 
@@ -58,6 +61,18 @@
   transform: scaleX(0);
   transform-origin: left;
   animation: strike 900ms 700ms var(--ease-out) forwards;
+}
+
+/* Once type.js takes over it needs to draw the line more than once, so the
+   one-shot keyframe is swapped for a transition it can toggle. Without JS the
+   keyframe above still runs and the word still gets crossed out. */
+.hero__title .is-struck.is-live::after {
+  animation: none;
+  transition: transform 520ms var(--ease-out);
+}
+
+.hero__title .is-struck.is-live.is-cut::after {
+  transform: scaleX(1);
 }
 
 @keyframes strike {
@@ -693,25 +708,38 @@
   list-style: none;
 }
 
-.timeline::before {
+.timeline::before,
+.timeline::after {
   content: "";
   position: absolute;
   left: 7px;
   top: 10px;
   bottom: 10px;
   width: 2px;
+}
+
+.timeline::before {
+  background: var(--ink-400);
+}
+
+.timeline::after {
   background: linear-gradient(
     to bottom,
     var(--alarm),
     var(--amber) 30%,
     var(--jade) 70%
   );
+  /* Clipping rather than shrinking keeps the gradient anchored to the full
+     spine, so the colour at a given point does not shift as you scroll.
+     Defaults to fully drawn, which is what a no-JS reader gets. */
+  clip-path: inset(0 0 calc(100% - var(--tl-progress, 100%)) 0);
 }
 
 @media (min-width: 900px) {
   /* Pulled back by half its own width so the spine's centre, not its left
      edge, sits on the 50% line the dots are aligned to. */
-  .timeline::before {
+  .timeline::before,
+  .timeline::after {
     left: calc(50% - 1px);
   }
 }
@@ -1186,4 +1214,146 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--tx-faint);
+}
+
+/* --- The voltage dial ---------------------------------------------------
+   Two measured settings from one experiment, swapped by the reader. The
+   acid colour marks it as belonging to the chemistry section. */
+
+.dial {
+  display: grid;
+  gap: var(--sp-6);
+  margin-top: var(--sp-8);
+  padding: var(--sp-6) var(--sp-5);
+  background: var(--ink-100);
+  border: 2px solid var(--toxic);
+  box-shadow: var(--off-3) var(--toxic);
+}
+
+@media (min-width: 860px) {
+  .dial {
+    grid-template-columns: minmax(0, 330px) minmax(0, 1fr);
+    gap: var(--sp-8);
+    align-items: center;
+    padding: var(--sp-7) var(--sp-6);
+  }
+}
+
+.dial__side .display {
+  margin-bottom: var(--sp-5);
+}
+
+.dial__seg {
+  border-color: var(--toxic);
+}
+
+.dial__seg button + button {
+  border-left-color: var(--toxic);
+}
+
+.dial__seg button[aria-pressed="true"] {
+  background: var(--toxic);
+  color: var(--ink-000);
+}
+
+.dial__src {
+  margin: var(--sp-5) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  line-height: 1.7;
+  color: var(--tx-faint);
+}
+
+.dial__n {
+  display: block;
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(3.5rem, 2rem + 7vw, 8rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+  color: var(--toxic);
+}
+
+.dial__unit {
+  display: block;
+  margin-top: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-lo);
+}
+
+/* Uppercasing a micro sign yields a capital Mu, which reads as "MG" — a
+   thousandfold error in a unit. This one stays exactly as written. */
+.dial__u {
+  text-transform: none;
+}
+
+.dial__bar {
+  height: 14px;
+  margin-top: var(--sp-5);
+  background: var(--ink-300);
+  border: 2px solid var(--ink-400);
+  overflow: hidden;
+}
+
+.dial__fill {
+  height: 100%;
+  width: 3%;
+  background: var(--toxic);
+  transition: width 620ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dial__fill {
+    transition: none;
+  }
+}
+
+.dial__note {
+  margin: var(--sp-4) 0 0;
+  font-size: var(--t-small);
+  line-height: 1.55;
+  color: var(--tx-mid);
+  max-width: 46ch;
+  min-height: 3.2em;
+}
+
+/* --- "If you'd stopped on ..." ------------------------------------------
+   The projection above is a forecast; this is arithmetic on a date that has
+   already passed, which is a different and harder thing to argue with. */
+
+.since {
+  display: grid;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  border: 2px dashed var(--ink-400);
+}
+
+.band--bone .since {
+  border-color: var(--bone-300);
+}
+
+.since__date {
+  max-width: 230px;
+}
+
+.since__line {
+  margin: var(--sp-2) 0 0;
+  font-family: var(--font-display);
+  font-stretch: 84%;
+  font-weight: 800;
+  font-size: var(--t-h3);
+  line-height: 1.05;
+  letter-spacing: var(--tr-h3);
+  color: var(--tx-hi);
+}
+
+.since__n {
+  color: var(--jade);
+  font-variant-numeric: tabular-nums;
 }

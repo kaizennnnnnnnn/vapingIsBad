@@ -75,6 +75,8 @@ assets/js/render.js        turns the data layer into markup
 assets/js/calculator.js    cost + nicotine + compounding engine
 assets/js/quiz.js          quiz state machine
 assets/js/vapour.js        the scroll-driven aerosol canvas
+assets/js/type.js          cursor-reactive display type + the cycling strike
+assets/js/play.js          myth guessing, the voltage dial, the timeline spine
 assets/js/reveal.js        scroll progress, reveal-on-enter, disclosures
 assets/js/main.js          nav, share, anchors
 tools/shoot.mjs            screenshot + overflow harness

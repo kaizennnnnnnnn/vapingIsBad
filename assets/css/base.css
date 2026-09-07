@@ -468,3 +468,19 @@ h4 {
     transform: none;
   }
 }
+
+/* --- Kinetic display type -----------------------------------------------
+   type.js splits display headings into one span per glyph and drives the
+   font's width axis from cursor distance. Kept as plain inline boxes on
+   purpose: inline-block would create a line-break opportunity between every
+   character and let a headline break mid-word. */
+
+.ch {
+  transition: font-stretch 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ch {
+    transition: none;
+  }
+}

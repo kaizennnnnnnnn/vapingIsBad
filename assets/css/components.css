@@ -676,8 +676,12 @@
 }
 
 .disclosure__verdict {
-  display: inline-block;
-  margin-bottom: var(--sp-3);
+  /* Block, not inline-block: as an inline box it sat on the first line of the
+     paragraph and pushed the opening words into a ragged indent. */
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: var(--sp-4);
   padding: 0.4em 0.65em 0.35em;
   background: var(--alarm);
   color: #fff;
@@ -775,4 +779,109 @@
   line-height: 1.6;
   color: var(--tx-lo);
   text-transform: none;
+}
+
+/* --- Guess-first myths ---------------------------------------------------
+   The verdict is worth more if the reader has committed to an answer first,
+   so play.js hides the reality behind a call. "Just show me" is always
+   there — nobody is locked out of the content by a game. */
+
+.guess {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-5);
+  padding: 0 0 var(--sp-5) var(--sp-5);
+  border-left: 3px solid var(--ink-400);
+}
+
+.guess__q {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-lo);
+}
+
+.guess__row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.guess__b {
+  padding: 0.5em 1.2em 0.45em;
+  border: 2px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-mid);
+  transition: color var(--d-fast) var(--ease-out),
+    transform var(--d-fast) var(--ease-out),
+    box-shadow var(--d-fast) var(--ease-out);
+}
+
+.guess__b:hover {
+  color: var(--tx-hi);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--off-2) var(--alarm);
+}
+
+.guess__skip {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--tx-faint);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.guess__skip:hover {
+  color: var(--tx-mid);
+}
+
+.guess__result {
+  display: inline-block;
+  padding: 0.45em 0.8em 0.4em;
+  background: var(--ink-300);
+  color: var(--tx-hi);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: rotate(-1.4deg);
+}
+
+.guess__result.is-right {
+  background: var(--jade);
+  color: var(--ink-000);
+}
+
+.guess__result.is-wrong {
+  background: var(--alarm);
+  color: #fff;
+}
+
+.guess.is-done {
+  border-left-color: transparent;
+  padding-bottom: var(--sp-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guess__b:hover {
+    transform: none;
+  }
+}
+
+.myth-tally {
+  margin: 0 0 var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--jade);
 }

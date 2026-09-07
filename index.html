@@ -49,7 +49,7 @@
     <p class="kicker">A read for one person in particular</p>
     <h1 class="display display--h1 hero__title">
       <span>Nobody wants</span>
-      <span>another <span class="is-struck">lecture</span></span>
+      <span>another <span class="is-struck" data-words="lecture|sermon|guilt trip|scare story|panic">lecture</span></span>
       <span><em>So here are the receipts.</em></span>
     </h1>
     <p class="lead" style="margin-bottom:var(--sp-6)">
@@ -171,6 +171,28 @@
       The last two cards are there deliberately. A page that only lists the alarming
       findings is a page you should stop trusting around card three.
     </p>
+
+    <div class="dial" data-dial data-reveal>
+      <div class="dial__side">
+        <p class="kicker kicker--plain">Run the experiment yourself</p>
+        <h3 class="display display--h3">Turn the coil up.</h3>
+        <div class="segmented dial__seg" role="group" aria-label="Coil voltage">
+          <button type="button" data-dial-v="4" aria-pressed="true">4.0 V &mdash; real use</button>
+          <button type="button" data-dial-v="5" aria-pressed="false">5.0 V &mdash; the machine</button>
+        </div>
+        <p class="dial__src">
+          Both readings come from the same replication, and neither is invented.
+          The only thing that changed is the setting. &mdash;
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28864295/" target="_blank" rel="noopener noreferrer">Farsalinos et al., PMID 28864295</a>
+        </p>
+      </div>
+      <div class="dial__out">
+        <span class="dial__n" data-dial-n>20</span>
+        <span class="dial__unit"><span class="dial__u">&micro;g</span> formaldehyde per 10 puffs</span>
+        <div class="dial__bar"><div class="dial__fill" data-dial-bar></div></div>
+        <p class="dial__note" data-dial-note></p>
+      </div>
+    </div>
 
     <div class="grid" style="margin-top:var(--sp-8);align-items:end">
       <figure class="figure col-body" data-reveal>
@@ -405,6 +427,15 @@
           <div class="swaps" data-c-swaps></div>
         </div>
 
+        <div class="since">
+          <label class="field__label" for="c-since">
+            <span>If you&rsquo;d stopped on</span>
+          </label>
+          <input class="input since__date" type="date" id="c-since" data-c-since>
+          <p class="since__line">you&rsquo;d have <span class="since__n" data-c-since-out>&mdash;</span> back.</p>
+          <p class="fact__src" data-c-since-note></p>
+        </div>
+
         <div>
           <div class="nic">
             <div><span class="nic__val" data-c-nic-mg>&mdash;</span><span class="nic__key">mg nicotine / day</span></div>
@@ -484,6 +515,7 @@
       </p>
     </div>
     <div class="col-full" data-reveal>
+      <p class="myth-tally" data-myth-tally hidden></p>
       <div data-r-myths></div>
     </div>
   </div>
@@ -620,6 +652,8 @@
 <script src="assets/js/calculator.js"></script>
 <script src="assets/js/quiz.js"></script>
 <script src="assets/js/vapour.js"></script>
+<script src="assets/js/type.js"></script>
+<script src="assets/js/play.js"></script>
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
