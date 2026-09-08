@@ -276,16 +276,18 @@ h4 {
   row-gap: var(--sp-6);
 }
 
-.col-full {
-  grid-column: 1 / -1;
-}
-.col-head {
-  grid-column: 1 / -1;
-}
-.col-body {
-  grid-column: 1 / -1;
-}
-.col-side {
+/* Mobile first: EVERY column class is full width until the grid is wide
+   enough to be worth splitting. A class listed only in the media query below
+   falls through to auto-placement, which hands it a single 1/12 track — about
+   9px at 375px — and the section silently collapses into one word per line.
+   That is what happened to .col-main and .col-note in the quiz. */
+.col-full,
+.col-head,
+.col-body,
+.col-side,
+.col-wide,
+.col-main,
+.col-note {
   grid-column: 1 / -1;
 }
 

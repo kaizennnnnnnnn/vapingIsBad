@@ -223,6 +223,21 @@ ph.on("console", (m) => m.type() === "error" && phErrors.push(m.text()));
 await ph.goto(url, { waitUntil: "networkidle" });
 await ph.waitForTimeout(500);
 
+// Every grid child must span the full width on a phone. A column class
+// defined only inside the desktop media query gets auto-placed into a single
+// 1/12 track instead, which is invisible to an overflow check because the
+// text simply wraps to one word per line.
+ok("no grid column collapses on a phone", await ph.evaluate(() => {
+  const bad = [];
+  document.querySelectorAll(".grid > *").forEach((el) => {
+    const w = el.getBoundingClientRect().width;
+    const parent = el.parentElement.getBoundingClientRect().width;
+    if (w < parent * 0.6) bad.push((el.className || "?") + " " + Math.round(w) + "px");
+  });
+  window.__gridBad = bad.join(", ");
+  return bad.length === 0;
+}), await ph.evaluate(() => window.__gridBad));
+
 ok("the route stands vertical on a phone", await ph.evaluate(() => {
   const st = Array.from(document.querySelectorAll(".station")).filter((s) => getComputedStyle(s).display !== "none");
   const spine = document.querySelector(".route__spine");

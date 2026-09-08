@@ -65,8 +65,10 @@ for (const w of sizes) {
     await page.screenshot({ path: path.join(out, `full-${w}.png`), fullPage: true });
   }
 
-  // Per-section shots at desktop width — easier to critique than one tall strip.
-  if (w >= 1024) {
+  // Per-section shots at every width. These were desktop-only, which is how a
+  // collapsed grid column in the quiz survived a dozen "no overflow" runs:
+  // the text just wrapped to one word per line and nothing overflowed.
+  {
     // The masthead is fixed, so it lands in the middle of element screenshots.
     await page.addStyleTag({ content: ".masthead,.progress{display:none!important}" });
     const ids = await page.evaluate(() =>
