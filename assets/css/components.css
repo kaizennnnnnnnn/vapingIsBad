@@ -933,6 +933,10 @@
 }
 
 .guess__skip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.6em;
   font-family: var(--font-mono);
   font-size: var(--t-micro);
   color: var(--tx-faint);
@@ -1101,7 +1105,7 @@
   margin: 0;
   padding: var(--sp-6) var(--sp-5);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: var(--sp-6) var(--sp-4);
   background: var(--bone-000);
   border: 2px solid var(--tx-hi);
@@ -1156,7 +1160,8 @@
   font-family: var(--font-display);
   font-stretch: 84%;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 0.86rem + 0.28vw, 1.1rem);
+  overflow-wrap: break-word;
   line-height: 1;
   letter-spacing: var(--tr-h3);
   color: var(--tx-hi);
